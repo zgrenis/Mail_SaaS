@@ -57,10 +57,10 @@ async function fetchNewEmails(user, seenMessageIds = new Set()) {
       const textPart = parts.find(p => p.mimeType === 'text/plain')
                     || parts.find(p => p.mimeType === 'text/html');
       if (textPart?.body?.data) {
-        body = Buffer.from(textPart.body.data, 'base64').toString('utf-8');
+        body = Buffer.from(textPart.body.data.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8');
       }
     } else if (detail.data.payload.body?.data) {
-      body = Buffer.from(detail.data.payload.body.data, 'base64').toString('utf-8');
+      body = Buffer.from(detail.data.payload.body.data.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8');
     }
 
     newEmails.push({
@@ -84,7 +84,7 @@ async function sendEmail(user, { to, subject, body }) {
   const message = [
     `From: ${user.gmail_address}`,
     `To: ${to}`,
-    `Subject: ${subject}`,
+    `Subject: =?UTF-8?B?${Buffer.from(subject).toString('base64')}?=`,
     'Content-Type: text/html; charset=utf-8',
     '',
     body

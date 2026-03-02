@@ -7,19 +7,7 @@ const { createOAuthClient, SCOPES } = require('../config/google');
 const { encrypt } = require('../services/cryptoService');
 const { sendEmail } = require('../services/gmailService');
 
-// JWT middleware — user.routes.js'deki mantıkla aynı
-function authMiddleware(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: 'Token gerekli' });
-
-  const token = authHeader.split(' ')[1];
-  try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
-  } catch {
-    res.status(401).json({ error: 'Geçersiz token' });
-  }
-}
+const authMiddleware = require('../middleware/auth');
 
 // GET /api/gmail/connect — frontend bu URL'i açar
 router.get('/connect', authMiddleware, (req, res) => {
