@@ -3,20 +3,24 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+const app = express();          // Create Express app
+app.use(cors());                // Enable requests for all routes
+app.use(bodyParser.json());     // Parse JSON bodies for all routes
 
-const userRoutes = require('./routes/user.routes');
-app.use('/api/users', userRoutes);
+const userRoutes = require('./routes/user.routes');     //import user routes
+app.use('/api/users', userRoutes);                      // Use user routes with /api/users prefix
 
-// --- YENİ ---
-const gmailRoutes = require('./routes/gmail.routes');
-app.use('/api/gmail', gmailRoutes);
+const gmailRoutes = require('./routes/gmail.routes');   //import gmail routes
+app.use('/api/gmail', gmailRoutes);                     // Use gmail routes with /api/gmail prefix
 
-const { startMailPoller } = require('./jobs/mailPoller');
-startMailPoller();
-// --- YENİ SON ---
+const { startMailPoller } = require('./jobs/mailPoller');  // Start the mail poller cron job 
+startMailPoller();           // Start the mail poller cron job to check for new emails every 5 minutes
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const PORT = process.env.PORT || 5000;  
+const HOST = process.env.HOST || '0.0.0.0'; 
+
+app.listen(PORT, HOST, () => {
+    console.log(`🚀 Sunucu başarıyla başlatıldı!`);
+    console.log(`🌍 Adres: http://${HOST}:${PORT}`);
+});  // Start the server and listen on the specified port
