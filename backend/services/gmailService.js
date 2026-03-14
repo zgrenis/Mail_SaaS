@@ -12,7 +12,7 @@ async function getAuthenticatedClient(user) {
     expiry_date: user.mail_token_expiry
   });
 
-  // Token süresi dolduysa yenile
+  // check token lifetime
   if (Date.now() >= user.mail_token_expiry - 60000) {
     const { credentials } = await oauth2Client.refreshAccessToken();
     await pool.query(

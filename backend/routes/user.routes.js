@@ -4,16 +4,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
 
-// Register
-
+// REGISTER
 router.post('/register', async (req, res) => {
   const { email, password, plan } = req.body;
-
   try {
-    // 1. Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // 2. Attempt to insert into the database
+    // add new user to database
     const result = await pool.query(
       'INSERT INTO users (email, password, plan) VALUES ($1, $2, $3) RETURNING id, email, plan, created_at',
       [email, hashedPassword, plan || 'Free'] // Default to 'Free' if plan is not provided
@@ -26,22 +22,22 @@ router.post('/register', async (req, res) => {
     });
 
   } catch (err) {
-    // 3. Specific Error Handling
+    // specific error handling for unique constraint violation (email already exists)
     if (err.code === '23505') {
-      // 23505 = Unique Violation (Duplicate key)
       return res.status(409).json({ 
         error: "This email address is already in use. Please try another one.(TR Email adresi zaten kullanılıyor. Lütfen başka bir tane deneyin.)" 
       });
     }
 
-    // 4. General message for all other unexpected errors
-    console.error("Registration error:", err); // Log for developer visibility
+    // general error
+    console.error("Registration error:", err); //! Log for developer visibility
     res.status(500).json({ 
       error: "An internal server error occurred. Please try again later.(TR Dahili bir sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.)" 
     });
   }
 });
-// Login
+
+// LOGIN
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
