@@ -2,27 +2,30 @@ const cron = require('node-cron');
 const pool = require('../config/db');
 const { fetchNewEmails, sendEmail } = require('../services/gmailService');
 
+// relevant departments 
 const DEPARTMENT_MAIL_MAP = {
   "Lojistik": process.env.lojistik_mail,
   "Müşteri Hizmetleri": process.env.musteri_hizmetleri_mail,
   "Finans": process.env.finans_mail,
   "Teknik Destek": process.env.teknik_destek_mail
 };
+const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL;
 
-async function isProcessed(userId, messageId) {
+async function isProcessed(userId, messageId) {       // check if email is already processed for user
   const { rows } = await pool.query(
-    'SELECT 1 FROM processed_emails WHERE user_id=$1 AND message_id=$2',
+    'SELECT 1 FROM processed_emails WHERE user_id=$1 AND message_id=$2', // returns 1 if found, otherwise empty result
     [userId, messageId]
   );
-  return rows.length > 0;
+  return rows.length > 0;  // 1 or 0  
 }
 
-async function markProcessed(userId, messageId, meta = {}) {
+// save processed email with preview
+async function markProcessed(userId, messageId, meta = {}) { //meta ={} prevent error in empty situtions
   await pool.query(
     `INSERT INTO processed_emails 
       (user_id, message_id, subject, preview, department, sender) 
      VALUES ($1, $2, $3, $4, $5, $6) 
-     ON CONFLICT DO NOTHING`,
+     ON CONFLICT DO NOTHING`,                   //! if same email comes again, skip it without error
     [
       userId,
       messageId,
@@ -35,25 +38,25 @@ async function markProcessed(userId, messageId, meta = {}) {
 }
 
 async function classifyAndForward(user, email) {
-  let result = null; // scope'u try dışında tanımla
-
+  let result = null; 
+  
   try {
-    const response = await fetch('http://127.0.1.2:8000/siniflandirma/', {
+    const response = await fetch(`${PYTHON_SERVICE_URL}/siniflandirma/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: `${email.subject}\n${email.body}` })
     });
 
-    result = await response.json();
-    const department = result.department;
+    result = await response.json(); // convert response to json
+    const department = result.department; // extract department from response
 
+    // Log classification result for debugging
     console.log(`[Classifier] User ${user.id} - "${email.subject}"`);
     console.log(`  → Departman: ${department}`);
     console.log(`  → Duygu: ${result.duygu}`);
     console.log(`  → Skor: ${result.score}`);
-
-    const targetEmail = DEPARTMENT_MAIL_MAP[department];
-    if (!targetEmail) {
+    const targetEmail = DEPARTMENT_MAIL_MAP[department]; //mail address search in map
+    if (!targetEmail) {     // not defined department
       console.error(`[Classifier] Bilinmeyen departman: ${department}`);
       return result;
     }
@@ -90,47 +93,48 @@ async function classifyAndForward(user, email) {
         </div>
       `
     });
-
-    console.log(`[Forwarder] User ${user.id} - "${email.subject}" → ${targetEmail} gönderildi`);
-
+    // Log forwarding action for debugging
+      console.log(`[Forwarder] User ${user.id} - "${email.subject}" → ${targetEmail} gönderildi`);
   } catch (err) {
     console.error(`[Classifier] Hata - User ${user.id}:`, err.message);
   }
-
-  return result; // try/catch dışında, her durumda döner
+  return result; 
 }
 
+// polling function to fetch new emails for a user
 async function pollAllUsers() {
   try {
-    const { rows: users } = await pool.query(
+    //? rows destructure response which contains rowCount oid etc. Rows like response from postgres
+    const { rows: users } = await pool.query( //get mail tokens
       `SELECT id, gmail_address, mail_token, mail_access_token, mail_token_expiry
        FROM users WHERE mail_token IS NOT NULL`
     );
 
+    // Log checking total users
     console.log(`[MailPoller] ${users.length} kullanıcı kontrol ediliyor...`);
 
     for (const user of users) {
       try {
-        const emails = await fetchNewEmails(user, new Set());
+        const emails = await fetchNewEmails(user, new Set());     //fetching
 
-        for (const email of emails) {
+        for (const email of emails) {       // check email is processed or not
           const already = await isProcessed(user.id, email.id);
           if (already) {
             console.log(`[MailPoller] Atlandı (işlendi): "${email.subject}"`);
-            continue;
+            continue; // skip if already processed
           }
 
-          // Önce kaydet (department henüz yok)
+          // First, save the email, otherwise the email will be processed twice.
           await markProcessed(user.id, email.id, {
             subject: email.subject,
             preview: email.body?.split(/\s+/).slice(0, 10).join(' '),
             sender: email.from
           });
 
-          // Sonra sınıflandır ve gönder
+          // Then, classify
           const result = await classifyAndForward(user, email);
 
-          // Department gelince güncelle
+          // Update department in database if classification is successful
           if (result?.department) {
             await pool.query(
               'UPDATE processed_emails SET department=$1 WHERE user_id=$2 AND message_id=$3',
@@ -148,6 +152,7 @@ async function pollAllUsers() {
   }
 }
 
+// Starts the mail poller
 function startMailPoller() {
   console.log('[MailPoller] Başlatıldı — her 5 dakikada bir çalışacak');
   pollAllUsers();
