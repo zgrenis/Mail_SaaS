@@ -7,11 +7,6 @@ import os
 #load .env file 
 load_dotenv()
 
-#pull variables from .env
-HOST = os.getenv("HOST")
-PORT = int(os.getenv("PORT"))
-print(f"Starting server at {HOST}:{PORT}")
-
 app = FastAPI(title="Python Model Service")
 
 # Routers
@@ -22,13 +17,12 @@ app.include_router(hf_classifier_route.router) #router variable from hf_classifi
 def hello():
     return {"message": "Hello from Python FastAPI!"}
 
-
 # to run shortly = python -m app.main 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
         "app.main:app",
-        host=HOST,
-        port=PORT,
-        reload=True
+        host="0.0.0.0",
+        port=7860,  # static port for HF Spaces 
+        reload=False  # it must be false in Spaces'te 
     )

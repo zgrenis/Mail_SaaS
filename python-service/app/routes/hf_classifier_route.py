@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.models.input_model import InputText
 from app.services.hf_classifier_service import classify_text
 
-router = APIRouter(prefix="/siniflandirma")
+router = APIRouter(prefix="/classify")
 
 @router.post("/")
 def classify(item: InputText):
