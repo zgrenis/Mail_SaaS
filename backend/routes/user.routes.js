@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
+const authMiddleware = require('../middleware/auth');
 
 // REGISTER
 router.post('/register', async (req, res) => {
@@ -54,5 +55,38 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// DELETE ACCOUNT
+router.delete('/delete-account', authMiddleware, async (req, res) => {
+  try {
+    await pool.query('DELETE FROM processed_emails WHERE user_id=$1', [req.user.id]);
+    await pool.query('DELETE FROM users WHERE id=$1', [req.user.id]);
+    res.json({ message: 'Hesap başarıyla silindi.' });
+  } catch (err) {
+    console.error('Hesap silme hatası:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// REMOVE GMAIL CONNECTION
+router.delete('/disconnect-gmail', authMiddleware, async (req, res) => {
+  try {
+    await pool.query('DELETE FROM processed_emails WHERE user_id=$1', [req.user.id]);
+    await pool.query(
+      `UPDATE users SET 
+        mail_token=NULL, 
+        mail_access_token=NULL, 
+        mail_token_expiry=NULL, 
+        gmail_address=NULL 
+       WHERE id=$1`,
+      [req.user.id]
+    );
+    res.json({ message: 'Gmail bağlantısı kesildi, işlenmiş mailler temizlendi.' });
+  } catch (err) {
+    console.error('Gmail disconnect hatası:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;
