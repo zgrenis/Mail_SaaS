@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 pydantic
-torch
-transformers
+requests
+huggingface_hub
 python-dotenv
 google-genai
