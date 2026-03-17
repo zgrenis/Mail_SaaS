@@ -41,7 +41,7 @@ async function classifyAndForward(user, email) {
   let result = null; 
   
   try {
-    const response = await fetch(`${PYTHON_SERVICE_URL}/classify`, {
+    const response = await fetch(`${PYTHON_SERVICE_URL}/classify/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: `${email.subject}\n${email.body}` })

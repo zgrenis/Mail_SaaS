@@ -1,5 +1,4 @@
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
-import torch
+import requests
 import json
 from huggingface_hub import hf_hub_download
 from google import genai
@@ -9,15 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 HF_ID = os.getenv("HF_ID")
+HF_SPACE_URL = os.getenv("HF_SPACE_URL")  
 
-# ---- HF Model & Tokenizer ----
-tokenizer = AutoTokenizer.from_pretrained(HF_ID)
-model = AutoModelForSequenceClassification.from_pretrained(HF_ID)
-
-# Label mapping
-label_file = hf_hub_download(repo_id=HF_ID, filename="label_mapping.json")
-with open(label_file, "r", encoding="utf-8") as f:
-    departments = json.load(f)
 
 # ---- Gemini Setup ----
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -29,14 +21,6 @@ if GEMINI_API_KEY:
         client = genai.Client(api_key=GEMINI_API_KEY)
     except:
         client = None
-
-# HF pipeline
-pipe = pipeline(
-    "text-classification",
-    model=model,
-    tokenizer=tokenizer,
-    device=0 if torch.cuda.is_available() else -1
-)
 
 
 # ------------ CLASSIFY FUNCTION -------------
@@ -84,17 +68,21 @@ Sadece düzeltilmiş metni döndür.
             fixed_text = input_text
             emotion = None
 
-    # ---- HF Classification ----
+    # ---- HF Space Classification ----
     try:
-        res = pipe(fixed_text)[0]
-        pred_idx = int(res["label"].split("_")[-1])
+        response = requests.post(
+            HF_SPACE_URL,
+            json={"text": fixed_text},
+            timeout=30
+        )
+        res = response.json()
 
         return {
             "original_text": input_text,
             "fixed_text": fixed_text,
             "duygu": emotion,
-            "department": departments[pred_idx],
-            "score": round(res["score"], 4)
+            "department": res.get("department"),
+            "score": res.get("score")
         }
 
     except Exception as e:
