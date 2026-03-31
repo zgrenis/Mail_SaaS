@@ -9,16 +9,12 @@ require('dotenv').config();
 //? dev env
 /*
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT,
-  ssl: { 
-    rejectUnauthorized: false 
-  }
-});
-*/
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL?.includes('render.com') || process.env.DATABASE_URL?.includes('amazonaws.com')
+    ? { rejectUnauthorized: false }
+    : false
+});*/
+
 
 //? prod env
 const pool = new Pool({

@@ -22,7 +22,8 @@ router.get('/connect', authMiddleware, (req, res) => {
 
 // SAVE TOKENS GET /api/gmail/callback — REDIRECT_URI
 router.get('/callback', async (req, res) => {
-  const { code, state } = req.query; // code is the authorization apply code for one usage ...?code=4/0..
+  try {
+    const { code, state } = req.query; // code is the authorization apply code for one usage ...?code=4/0..
   const userId = parseInt(state);
 
   if (!code || !userId) {
@@ -69,10 +70,14 @@ router.get('/callback', async (req, res) => {
       ]
     );
 
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard?gmail=connected`);
+    res.redirect(`${process.env.GOOGLE_REDIRECT_URI}`);
   } catch (err) {
     console.error('[Gmail Callback] Hata:', err);
     res.redirect(`${process.env.FRONTEND_URL}/dashboard?gmail=error`);
+  }
+  } catch (error) {
+     console.error('[Gmail Callback] Detaylı hata:', JSON.stringify(err, null, 2));
+  res.redirect(`${process.env.FRONTEND_URL}/dashboard?gmail=error&reason=${err.message}`);
   }
 });
 
