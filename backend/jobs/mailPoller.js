@@ -19,18 +19,19 @@ async function isProcessed(userId, messageId) {       // check if email is alrea
   return rows.length > 0;  // 1 or 0  
 }
 
-// save processed email with preview
+// save processed email
 async function markProcessed(userId, messageId, meta = {}) { //meta ={} prevent error in empty situtions
   await pool.query(
     `INSERT INTO processed_emails 
-      (user_id, message_id, subject, preview, department, sender) 
-     VALUES ($1, $2, $3, $4, $5, $6) 
+      (user_id, message_id, subject, mail, processed, department, sender) 
+     VALUES ($1, $2, $3, $4, $5, $6, $7) 
      ON CONFLICT DO NOTHING`,                   //! if same email comes again, skip it without error
     [
       userId,
       messageId,
       meta.subject || null,
-      meta.preview || null,
+      meta.mail || null,
+      meta.processed || null,
       meta.department || null,
       meta.sender || null
     ]
@@ -127,18 +128,24 @@ async function pollAllUsers() {
           // First, save the email, otherwise the email will be processed twice.
           await markProcessed(user.id, email.id, {
             subject: email.subject,
-            preview: email.body?.split(/\s+/).slice(0, 10).join(' '),
+            mail: email.body,
             sender: email.from
           });
 
           // Then, classify
           const result = await classifyAndForward(user, email);
 
-          // Update department in database if classification is successful
-          if (result?.department) {
+          // Update department and processed fields in database if classification is successful
+          if (result) {
+            const processedContent = `Düzeltilmiş Mail:
+${result.fixed_text || '-'}
+
+Departman: ${result.department || '-'}
+Duygu Durumu: ${result.duygu || '-'}`;
+
             await pool.query(
-              'UPDATE processed_emails SET department=$1 WHERE user_id=$2 AND message_id=$3',
-              [result.department, user.id, email.id]
+              'UPDATE processed_emails SET department=$1, processed=$2 WHERE user_id=$3 AND message_id=$4',
+              [result.department, processedContent, user.id, email.id]
             );
           }
         }

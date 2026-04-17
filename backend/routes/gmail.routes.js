@@ -81,7 +81,12 @@ router.get('/callback', async (req, res) => {
   }
 });
 
-// POST /api/gmail/send
+
+
+
+
+
+//? POST /api/gmail/send  just for test
 router.post('/send', authMiddleware, async (req, res) => {
   const { to, subject, body } = req.body;
 
@@ -103,16 +108,6 @@ router.post('/send', authMiddleware, async (req, res) => {
     console.error('[Gmail Send] Hata:', err);
     res.status(500).json({ error: err.message });
   }
-});
-
-// REMOVE CONNECTIONS DELETE /api/gmail/disconnect
-router.delete('/disconnect', authMiddleware, async (req, res) => {
-  await pool.query(
-    `UPDATE users SET mail_token=NULL, mail_access_token=NULL,
-     mail_token_expiry=NULL, gmail_address=NULL WHERE id=$1`,
-    [req.user.id]
-  );
-  res.json({ success: true });
 });
 
 module.exports = router;
