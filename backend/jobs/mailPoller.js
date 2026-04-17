@@ -138,10 +138,10 @@ async function pollAllUsers() {
           // Update department and processed fields in database if classification is successful
           if (result) {
             const processedContent = `Düzeltilmiş Mail:
-${result.fixed_text || '-'}
+            ${result.fixed_text || '-'}
 
-Departman: ${result.department || '-'}
-Duygu Durumu: ${result.duygu || '-'}`;
+            Departman: ${result.department || '-'}
+            Duygu Durumu: ${result.duygu || '-'}`;
 
             await pool.query(
               'UPDATE processed_emails SET department=$1, processed=$2 WHERE user_id=$3 AND message_id=$4',
