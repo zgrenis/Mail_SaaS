@@ -110,4 +110,19 @@ router.post('/send', authMiddleware, async (req, res) => {
   }
 });
 
+// GET /api/gmail/emails -> pull emails about loggined user
+router.get('/get-emails', authMiddleware, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      'SELECT * FROM processed_emails WHERE user_id=$1',
+      [req.user.id]
+    );
+
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error('[Gmail Fetch Emails] Hata:', err);
+    res.status(500).json({ error: 'Mailler getirilirken bir hata oluştu.' });
+  }
+});
+
 module.exports = router;

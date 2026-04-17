@@ -73,7 +73,7 @@ async function classifyAndForward(user, email) {
                 <table width="600" cellpadding="0" cellspacing="0" style="background:#547792; border-radius:12px;">
                   <tr>
                     <td align="center" style="background:#213448;color:#FFFCFB;padding:24px;font-size:26px;font-weight:600;letter-spacing:1px;font-family:'Trebuchet MS',Arial,sans-serif;border-radius:12px 12px 0 0;">
-                      AKILLI MAIL SİSTEMİ
+                      AKILLI MAIL ASİSTANI
                     </td>
                   </tr>
                   <tr>

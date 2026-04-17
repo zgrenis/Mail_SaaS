@@ -7,6 +7,8 @@ const app = express();          // Create Express app
 app.use(cors());                // Enable requests for all routes
 app.use(bodyParser.json());     // Parse JSON bodies for all routes
 
+
+
 const userRoutes = require('./routes/user.routes');     //import user routes
 app.use('/api/users', userRoutes);                      // Use user routes with /api/users prefix
 
