@@ -4,8 +4,15 @@ const cors = require('cors');
 require('dotenv').config();
 
 
-const app = express();          // Create Express app
-app.use(cors());                // Enable requests for all routes
+const app = express();          
+const corsOptions = {
+  // .env'den gelen değerin sonunda slash varsa onu temizleyelim (garantiye alalım)
+  origin: process.env.FRONTEND_URL?.replace(/\/$/, ""), 
+  credentials: true,
+  optionsSuccessStatus: 200 
+};
+
+app.use(cors(corsOptions));             // Enable requests for all routes
 app.use(bodyParser.json());     // Parse JSON bodies for all routes
 
 app.use(bodyParser.urlencoded({ extended: true })); //!test

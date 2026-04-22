@@ -1,8 +1,7 @@
-// src/api/axios.js
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api/users', // Backend endpoint'inin ana adresi
+  baseURL: `${import.meta.env.VITE_BACKEND_URL}`  , // Base url for endpoints
 });
 
 // Her istekten önce çalışacak aracı (interceptor)

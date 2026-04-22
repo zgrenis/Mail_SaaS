@@ -1,6 +1,9 @@
 
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'; // Redux'tan veri çekmek için
+import PrivateRoute from './components/PrivateRoute';
+
+
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -43,16 +46,17 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
-
+          
           <Route 
             path="/dashboard" 
             element={
-              <ProtectedRoute>
+              <PrivateRoute >
                 <Dashboard />
-              </ProtectedRoute>
+              </PrivateRoute>
             } 
-          />
+          /> 
 
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
