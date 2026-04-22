@@ -75,7 +75,7 @@ def classify_text(input_text: str):
 
 # Gramer fix with Gemini
     prompt = f"""
-Aşağıdaki kullanıcı girdisini dil bilgisi ve yazım hatalarına göre düzelt.
+Aşağıdaki kullanıcı girdisini en kısa haliyle özetle ve dil bilgisi ve yazım hatalarına göre düzelt.
 Düzeltilmiş metnin sonuna şu formatta duygu ekle:
 
 (Metin içi duygu)

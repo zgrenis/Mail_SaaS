@@ -8,6 +8,7 @@ const authMiddleware = require('../middleware/auth');
 // REGISTER
 router.post('/register', async (req, res) => {
   const { email, password, plan } = req.body;
+  console.log("Register request body:", req.body); // Log request body
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     // add new user to database
