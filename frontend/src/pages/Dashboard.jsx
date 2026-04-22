@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store/authSlice';
+import { logout, selectAuthLoading, connectGmail } from '../store/authSlice';
 import api from '../api/axios';
 import { useState } from 'react';
 import ActionCard from '../components/ActionCard';
@@ -8,6 +8,19 @@ export default function Dashboard() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth); // Gerekirse token bilgisini buradan kullanabilirsin
   const [status, setStatus] = useState({ message: '', type: '' });
+
+  const loading = useSelector(selectAuthLoading);
+
+  const handleGmailConnect = async () => {
+    const result = await dispatch(connectGmail());
+
+    if (connectGmail.fulfilled.match(result)) {
+      const url = result.payload?.url || result.payload?.authUrl;
+      if (url) {
+        window.location.href = url; // Google OAuth sayfasına yönlendir
+      }
+    }
+  };
 
   const handleAction = async (endpoint, confirmMsg) => {
     if (!window.confirm(confirmMsg)) return;
@@ -69,12 +82,12 @@ export default function Dashboard() {
           {/* Account Operations  */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 1. Card Connect Gmail */}
-            <ActionCard 
+            <ActionCard
               icon="📧"
               title="Email Entegrasyonu"
               description="Gmail adresinizi bağlayarak e-postalarınızı otomatik olarak analiz edebilirsiniz."
-              buttonText="Gmail Hesabınızı Bağlayın"
-              onClick={() => handleAction('/connect-gmail', 'Gmail bağlamak istiyor musunuz?')}
+              buttonText={loading ? 'Yönlendiriliyor...' : 'Gmail Hesabınızı Bağlayın'}
+              onClick={handleGmailConnect}
               variant="green"
             />
 

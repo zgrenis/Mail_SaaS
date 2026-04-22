@@ -57,6 +57,21 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+// Mevcut thunk'ların yanına ekle
+export const connectGmail = createAsyncThunk(
+  'auth/connectGmail',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const res = await axios.get(`${BASE_URL}/api/gmail/connect`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data; // { url: "https://accounts.google.com/..." }
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || 'Gmail bağlantısı kurulamadı.');
+    }
+  }
+);
 
 // ─── Slice ────────────────────────────────────────────────────────────────────
 
@@ -77,7 +92,7 @@ const authSlice = createSlice({
       state.token = token;
       state.user = user;
       state.isAuthenticated = true;
-      localStorage.setItem('token', token);
+        localStorage.setItem('token', token);
     },
     logout(state) {
       state.token = null;
@@ -125,6 +140,20 @@ const authSlice = createSlice({
         state.successMessage = 'Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...';
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Gmail Connect
+    builder
+      .addCase(connectGmail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(connectGmail.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(connectGmail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
