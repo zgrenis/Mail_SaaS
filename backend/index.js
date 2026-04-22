@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
+
 const app = express();          // Create Express app
 app.use(cors());                // Enable requests for all routes
 app.use(bodyParser.json());     // Parse JSON bodies for all routes
@@ -14,6 +15,9 @@ app.use('/api/users', userRoutes);                      // Use user routes with 
 
 const gmailRoutes = require('./routes/gmail.routes');   //import gmail routes
 app.use('/api/gmail', gmailRoutes);                     // Use gmail routes with /api/gmail prefix
+
+const contactRoutes = require("./routes/contact.routes");
+app.use("/api/contact", contactRoutes);
 
 const { startMailPoller } = require('./jobs/mailPoller');  // Start the mail poller cron job 
 startMailPoller();           // Start the mail poller cron job to check for new emails every 5 minutes
