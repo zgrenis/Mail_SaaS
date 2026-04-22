@@ -57,7 +57,7 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
-// Mevcut thunk'ların yanına ekle
+
 export const connectGmail = createAsyncThunk(
   'auth/connectGmail',
   async (_, { getState, rejectWithValue }) => {
@@ -73,6 +73,70 @@ export const connectGmail = createAsyncThunk(
   }
 );
 
+export const disconnectGmail = createAsyncThunk(
+  'auth/disconnectGmail',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const res = await axios.delete(`${BASE_URL}/api/users/disconnect-gmail`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || 'Gmail bağlantısı kesilemedi.');
+    }
+  }
+);
+
+export const deleteAccount = createAsyncThunk(
+  'auth/deleteAccount',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const res = await axios.delete(`${BASE_URL}/api/users/delete-account`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || 'Hesap silinemedi.');
+    }
+  }
+);
+export const fetchEmails = createAsyncThunk(
+  'auth/fetchEmails',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const res = await axios.get(`${BASE_URL}/api/gmail/get-emails`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log('fetchEmails response:', res.data); // ← ekle
+      return res.data.data;
+    } catch (err) {
+      console.log('fetchEmails error:', err); // ← ekle
+      return rejectWithValue(err.response?.data?.error || 'Mailler yüklenemedi.');
+    }
+  }
+);
+
+export const resolveComplaint = createAsyncThunk(
+  'auth/resolveComplaint',
+  async (messageId, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const res = await axios.patch(
+        `${BASE_URL}/api/gmail/emails/${messageId}/complaint`,
+        { complaint: false },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return { messageId, ...res.data };
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || 'Güncelleme başarısız.');
+    }
+  }
+);
+
+
 // ─── Slice ────────────────────────────────────────────────────────────────────
 
 const authSlice = createSlice({
@@ -84,6 +148,9 @@ const authSlice = createSlice({
     loading: false,
     error: null,
     successMessage: null,
+    emails: [],
+    emailsLoading: false,
+    emailsError: null,
   },
   reducers: {
     setCredentials(state, action) {
@@ -157,6 +224,62 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
+
+    // Disconnect Gmail
+    builder
+      .addCase(disconnectGmail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.successMessage = null;
+      })
+      .addCase(disconnectGmail.fulfilled, (state) => {
+        state.loading = false;
+        state.successMessage = 'Gmail bağlantısı başarıyla kaldırıldı.';
+      })
+      .addCase(disconnectGmail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Delete Account
+    builder
+      .addCase(deleteAccount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.successMessage = null;
+      })
+      .addCase(deleteAccount.fulfilled, (state) => {
+        state.loading = false;
+        state.successMessage = 'Hesap başarıyla silindi. Yönlendiriliyorsunuz...';
+        state.token = null;
+        state.user = null;
+        state.isAuthenticated = false;
+        localStorage.removeItem('token');
+      })
+      .addCase(deleteAccount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    builder
+      .addCase(fetchEmails.pending, (state) => {
+        state.emailsLoading = true;
+        state.emailsError = null;
+      })
+      .addCase(fetchEmails.fulfilled, (state, action) => {
+        state.emailsLoading = false;
+    state.emails = action.payload;
+  })
+  .addCase(fetchEmails.rejected, (state, action) => {
+    state.emailsLoading = false;
+    state.emailsError = action.payload;
+  });
+
+builder
+  .addCase(resolveComplaint.fulfilled, (state, action) => {
+    const email = state.emails.find(e => e.message_id === action.payload.messageId);
+    if (email) email.complaint = false;
+  });
   },
 });
 
@@ -170,3 +293,6 @@ export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectAuthLoading = (state) => state.auth.loading;
 export const selectAuthError = (state) => state.auth.error;
 export const selectAuthSuccess = (state) => state.auth.successMessage;
+export const selectEmails = (state) => state.auth.emails;
+export const selectEmailsLoading = (state) => state.auth.emailsLoading;
+export const selectEmailsError = (state) => state.auth.emailsError;

@@ -1,11 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, selectAuthLoading, connectGmail } from '../store/authSlice';
+import { logout, selectAuthLoading, connectGmail, disconnectGmail, deleteAccount } from '../store/authSlice';
 import api from '../api/axios';
 import { useState } from 'react';
 import ActionCard from '../components/ActionCard';
+import { useNavigate } from 'react-router-dom';
+import EmailsTable from '../components/EmailsTable';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth); // Gerekirse token bilgisini buradan kullanabilirsin
   const [status, setStatus] = useState({ message: '', type: '' });
 
@@ -19,6 +22,23 @@ export default function Dashboard() {
       if (url) {
         window.location.href = url; // Google OAuth sayfasına yönlendir
       }
+    }
+  };
+
+  const handleDisconnectGmail = async () => {
+    const result = await dispatch(disconnectGmail());
+    if (disconnectGmail.fulfilled.match(result)) {
+      alert('Gmail bağlantısı kesildi.'); // ya da toast notification
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirm = window.confirm('Hesabınız kalıcı olarak silinecek. Emin misiniz?');
+    if (!confirm) return;
+
+    const result = await dispatch(deleteAccount());
+    if (deleteAccount.fulfilled.match(result)) {
+      navigate('/register'); // Hesap silindi, kayıt sayfasına yönlendir
     }
   };
 
@@ -52,7 +72,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex-grow p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-8xl mx-auto">
         {/* Header Section */}
         <header className="flex justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
           <div>
@@ -78,7 +98,10 @@ export default function Dashboard() {
           </div>
         )}
 
-
+          {/* E-posta Listeleme Tablosu */}
+          <div className="mb-10">
+            <EmailsTable />
+          </div>
           {/* Account Operations  */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 1. Card Connect Gmail */}
@@ -92,24 +115,26 @@ export default function Dashboard() {
             />
 
             {/* 2. Card Diconnect Gmail */}
-            <ActionCard 
-              icon="🔗"
-              title="Bağlantıyı Yönet"
-              description="Bağlı olan Gmail hesabınızın izinlerini yönetebilir veya geçmişi temizleyebilirsiniz."
-              buttonText="Gmail Bağlantısını Kes"
-              onClick={() => handleAction('/disconnect-gmail', 'Gmail bağlantısını kesmek istiyor musunuz? İşlenmiş veriler temizlenecektir.')}
-              variant="amber"
-            />
+            <ActionCard
+            icon="📧"
+            title="Gmail Bağlantısını Kes"
+            description="Gmail hesabınızın bağlantısını kesin."
+            buttonText={loading ? 'İşleniyor...' : 'Bağlantıyı Kes'}
+            onClick={handleDisconnectGmail}
+            variant="amber"
+          />
+
+     
 
             {/* 3. Card Diconnect Gmail */}
-            <ActionCard 
-              icon="⚠️"
-              title="Tehlikeli Bölge"
-              description="Hesabınızı sildiğinizde tüm verileriniz kalıcı olarak kaldırılır. Bu işlem geri alınamaz."
-              buttonText="Hesabı Tamamen Sil"
-              onClick={() => handleAction('/delete-account', 'Hesabınızı kalıcı olarak silmek istediğinize emin misiniz?')}
-              variant="red"
-            />
+            <ActionCard
+            icon="🗑️"
+            title="Hesabı Sil"
+            description="Hesabınızı kalıcı olarak silin. Bu işlem geri alınamaz."
+            buttonText={loading ? 'Siliniyor...' : 'Hesabı Sil'}
+            onClick={handleDeleteAccount}
+            variant="red"
+          />
           </div>
       </div>
     </div>
