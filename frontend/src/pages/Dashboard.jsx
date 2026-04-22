@@ -5,6 +5,7 @@ import { useState } from 'react';
 import ActionCard from '../components/ActionCard';
 import { useNavigate } from 'react-router-dom';
 import EmailsTable from '../components/EmailsTable';
+import DepartmentStats from '../components/DepartmanStats';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -101,6 +102,10 @@ export default function Dashboard() {
           {/* E-posta Listeleme Tablosu */}
           <div className="mb-10">
             <EmailsTable />
+          </div>
+          {/* Departman İstatistikleri */}
+          <div className="mb-10">
+            <DepartmentStats />
           </div>
           {/* Account Operations  */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

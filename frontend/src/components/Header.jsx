@@ -21,7 +21,7 @@ export default function Header() {
         onClick={() => navigate('/')}
         className="font-bold text-indigo-600 text-xl cursor-pointer"
       >
-        Logo
+        OrbisMail
       </span>
 
       <nav className="flex items-center gap-3">
