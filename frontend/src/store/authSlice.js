@@ -110,10 +110,10 @@ export const fetchEmails = createAsyncThunk(
       const res = await axios.get(`${BASE_URL}/api/gmail/get-emails`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log('fetchEmails response:', res.data); // ← ekle
+      console.log('fetchEmails response:', res.data); 
       return res.data.data;
     } catch (err) {
-      console.log('fetchEmails error:', err); // ← ekle
+      console.log('fetchEmails error:', err); 
       return rejectWithValue(err.response?.data?.error || 'Mailler yüklenemedi.');
     }
   }

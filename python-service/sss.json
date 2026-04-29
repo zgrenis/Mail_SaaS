@@ -1,0 +1,975 @@
+[
+  {
+    "id": 1,
+    "department": "Lojistik",
+    "intent": "kargo_durumu",
+    "variations": [
+      "Kargom nerede?",
+      "Siparişim hangi aşamada?",
+      "Kargo takibini nasıl yapabilirim?",
+      "Ürünüm yolda mı?"
+    ],
+    "response": "Siparişinizin kargo durumu, tarafınıza iletilen takip numarası üzerinden görüntülenebilmektedir. Detaylı bilgi için ilgili e-postayı kontrol etmenizi rica ederiz."
+  },
+  {
+    "id": 2,
+    "department": "Lojistik",
+    "intent": "kargo_gecikmesi",
+    "variations": [
+      "Kargom gecikti",
+      "Siparişim neden hala gelmedi?",
+      "Teslimat neden uzadı?",
+      "Kurye paketi hala getirmedi"
+    ],
+    "response": "Yaşanan gecikme için üzgünüz. Kargo sürecindeki yoğunluk veya operasyonel aksaklıklar nedeniyle teslimat süresi uzayabilmektedir. Siparişiniz en kısa sürede tarafınıza ulaştırılacaktır."
+  },
+  {
+    "id": 3,
+    "department": "Finans",
+    "intent": "kargo_ucreti",
+    "variations": [
+      "Kargo ücreti ne kadar?",
+      "Kargo paralı mı?",
+      "Ücretsiz kargo var mı?",
+      "Kargo bedeli nedir?"
+    ],
+    "response": "Kargo ücretleri sipariş tutarına ve dönemsel kampanyalara göre değişiklik gösterebilmektedir. Güncel kargo koşullarını web sitemiz üzerinden inceleyebilirsiniz."
+  },
+  {
+    "id": 4,
+    "department": "Lojistik",
+    "intent": "tahmini_teslimat",
+    "variations": [
+      "Ne zaman gelir?",
+      "Siparişim kaç günde ulaşır?",
+      "Teslim süresi nedir?",
+      "Ürünüm ne zaman elime geçer?"
+    ],
+    "response": "Siparişleriniz genellikle 1-3 iş günü içerisinde kargoya verilmektedir. Teslimat süresi bulunduğunuz bölgeye göre değişiklik gösterebilir."
+  },
+  {
+    "id": 5,
+    "department": "Lojistik",
+    "intent": "adres_degistirme",
+    "variations": [
+      "Kargomun adresimi değiştirmek istiyorum",
+      "Sipariş adresimi güncelleyebilir miyim?",
+      "Kargo adresini güncelleyebilir miyim?",
+      "Sipariş adresimi değiştirebilir miyim?"
+    ],
+    "response": "Siparişiniz henüz kargoya verilmediyse adres değişikliği yapılabilmektedir. Adres bilgilerinizin doğruluğundan siz sorumlu olacaksınız."
+  },
+  {
+    "id": 6,
+    "department": "Lojistik",
+    "intent": "kargo_firmasi",
+    "variations": [
+      "Hangi kargo firmasıyla çalışıyorsunuz?",
+      "Siparişim hangi kargo ile gönderilecek?",
+      "Kargo şirketi nedir?",
+      "Hangi firmadan teslim alacağım?"
+    ],
+    "response": "Siparişleriniz, anlaşmalı olduğumuz kargo firmaları aracılığıyla gönderilmektedir. Kargo firması bilgisi kargoya verildikten sonra tarafınıza iletilmektedir."
+  },
+  {
+    "id": 7,
+    "department": "Lojistik",
+    "intent": "teslim_edilmedi",
+    "variations": [
+      "Kargo teslim edilmedi",
+      "Siparişim bana ulaşmadı",
+      "Ürün teslim olmadı",
+      "Teslimat görünmüyor"
+    ],
+    "response": "Siparişinizin teslim edilmediğini kontrol ediyoruz. Kargo hareketlerinizi inceleyerek en kısa sürede sizlere geri dönüş sağlayacağız."
+  },
+  {
+    "id": 8,
+    "department": "Müşteri Hizmetleri",
+    "intent": "eksik_urun",
+    "variations": [
+      "Paketten ürün eksik çıktı",
+      "Siparişimde parça eksik",
+      "Eksik ürün geldi",
+      "Kutudan bir ürün çıkmadı"
+    ],
+    "response": "Eksik ürün teslimi nedeniyle üzgünüz. Lütfen sipariş numaranızı ve eksik ürüne ilişkin detayları paylaşınız, gerekli inceleme başlatılacaktır."
+  },
+  {
+    "id": 9,
+    "department": "Müşteri Hizmetleri",
+    "intent": "hasarli_kargo",
+    "variations": [
+      "Kargo hasarlı geldi",
+      "Ürün kutusu ezilmiş",
+      "Paketim zarar görmüş",
+      "Ürün kırık teslim edildi"
+    ],
+    "response": "Hasarlı teslimat nedeniyle üzgünüz. Durumu, mümkünse fotoğraflarla birlikte bize iletmenizi rica ederiz. İnceleme süreci başlatılacaktır."
+  },
+  {
+    "id": 10,
+    "department": "Lojistik",
+    "intent": "teslimat_saati",
+    "variations": [
+      "Kargo saat kaçta gelir?",
+      "Teslimat hangi saatlerde yapılır?",
+      "Gün içinde ne zaman teslim edilir?",
+      "Kuryeyi hangi saatlerde beklemeliyim?"
+    ],
+    "response": "Teslimat saatleri kargo firmasının operasyon planına göre değişiklik göstermektedir. Gün içerisinde teslimat yapılması planlanmaktadır."
+  },
+  {
+    "id": 11,
+    "department": "Finans",
+    "intent": "kapida_odeme",
+    "variations": [
+      "Kapıda ödeme var mı?",
+      "Teslimatta ödeme yapabilir miyim?",
+      "Kargoyu kapıda ödeyebilir miyim?",
+      "Kapıda nakit ödeme mümkün mü?"
+    ],
+    "response": "Kapıda ödeme seçeneği, sipariş verdiğiniz ürün ve teslimat koşullarına bağlı olarak sunulabilmektedir. Güncel ödeme seçeneklerini ödeme adımında görüntüleyebilirsiniz."
+  },
+  {
+    "id": 12,
+    "department": "Müşteri Hizmetleri",
+    "intent": "kargo_iptal",
+    "variations": [
+      "Kargoyu iptal edebilir miyim?",
+      "Sipariş yola çıkmadan durdurulabilir mi?",
+      "Gönderimi iptal etmek istiyorum",
+      "Kargo sürecini durdurabilir misiniz?"
+    ],
+    "response": "Siparişiniz henüz kargoya teslim edilmediyse iptal işlemi yapılabilmektedir. Talebiniz incelenerek tarafınıza bilgi verilecektir."
+  },
+  {
+    "id": 13,
+    "department": "Lojistik",
+    "intent": "farkli_adrese_teslim",
+    "variations": [
+      "Başka bir adrese teslim yapılabilir mi?",
+      "Siparişimi farklı adrese gönderebilir misiniz?",
+      "Teslimat adresi dışında bir yere kargo olur mu?",
+      "Alternatif adrese teslim mümkün mü?"
+    ],
+    "response": "Siparişiniz kargoya verilmeden önce adres değişikliği yapılabilmektedir. Farklı bir teslimat adresi talebinizi bizimle paylaşabilirsiniz."
+  },
+  {
+    "id": 14,
+    "department": "Lojistik",
+    "intent": "yurtdisi_kargo",
+    "variations": [
+      "Yurt dışına gönderim yapıyor musunuz?",
+      "Yurtdışı teslimat var mı?",
+      "Başka ülkeye kargo gönderiliyor mu?",
+      "Uluslararası teslimat mümkün mü?"
+    ],
+    "response": "Yurtdışı gönderimimiz mevcuttur. Ancak kargo ücreti ve teslimat süresi, hedef ülkeye göre değişiklik gösterebilmektedir. Detaylı bilgileri sipariş sayfasından öğrenebilir veya müşteri hizmetlerimizle iletişime geçebilirsiniz."
+  },
+  {
+    "id": 15,
+    "department": "Lojistik",
+    "intent": "ayni_gun_kargo",
+    "variations": [
+      "Aynı gün kargo var mı?",
+      "Bugün sipariş verirsem bugün çıkar mı?",
+      "Hızlı gönderim seçeneği bulunuyor mu?",
+      "Aynı gün teslimat yapıyor musunuz?"
+    ],
+    "response": "Aynı gün kargo seçeneği, stok durumu ve sipariş saati gibi koşullara bağlı olarak sunulabilmektedir. Sipariş ekranındaki teslimat bilgilerini kontrol etmenizi öneririz."
+  },
+  {
+    "id": 16,
+    "department": "Lojistik",
+    "intent": "hafta_sonu_teslimat",
+    "variations": [
+      "Hafta sonu teslimat yapılıyor mu?",
+      "Cumartesi kargo gelir mi?",
+      "Pazar günü teslimat var mı?",
+      "Hafta sonu sipariş teslim ediliyor mu?"
+    ],
+    "response": "Anlaşmalı kargo firmamız 7/24 hizmet vermektedir."
+  },
+  {
+    "id": 17,
+    "department": "Lojistik",
+    "intent": "kargo_takip_no",
+    "variations": [
+      "Takip numaramı nereden bulurum?",
+      "Kargo takip kodu gelmedi",
+      "Takip numarası nasıl öğrenilir?",
+      "Sipariş takip kodum nerede?"
+    ],
+    "response": "Kargo takip numaranız, siparişiniz kargoya teslim edildikten sonra tarafınıza iletilmektedir. E-posta ve SMS kutunuzu kontrol etmenizi rica ederiz."
+  },
+  {
+    "id": 18,
+    "department": "Müşteri Hizmetleri",
+    "intent": "siparis_parcalama",
+    "variations": [
+      "Siparişim neden parça parça geldi?",
+      "Ürünlerim tek pakette değil",
+      "Neden ayrı ayrı gönderildi?",
+      "Siparişim bölünerek mi yollandı?"
+    ],
+    "response": "Siparişiniz, stok ve lojistik planlamasına bağlı olarak birden fazla pakete ayrılabilmektedir. Bu durum teslimat sürecini etkileyebilmektedir."
+  },
+  {
+    "id": 19,
+    "department": "Müşteri Hizmetleri",
+    "intent": "kargo_iade_sureci",
+    "variations": [
+      "Kargolu iade nasıl yapılır?",
+      "Ürünü geri göndermek istiyorum",
+      "İade için kargo süreci nedir?",
+      "İade gönderimi nasıl olur?"
+    ],
+    "response": "Sipariş geçmişiniz üzerinden iade etmek istediğiniz ürünü seçerek iade talebi oluşturabilirsiniz. İade süreci hakkında detaylı bilgileri /profilim/iade sayfasında bulabilirsiniz."
+  },
+  {
+    "id": 20,
+    "department": "Lojistik",
+    "intent": "teslim_alinmadi",
+    "variations": [
+      "Kargo teslim alınmadı",
+      "Adreste yoktu diye dönmüş",
+      "Teslimat neden geri döndü?",
+      "Kargo neden geri gitmiş?"
+    ],
+    "response": "Teslimat adresinde alıcıya ulaşılamaması durumunda kargo firması gönderiyi geri çevirebilmektedir. Konuyu kontrol ederek sizlere bilgi sağlayacağız."
+  },
+
+  {
+    "id": 21,
+    "department": "Müşteri Hizmetleri",
+    "intent": "siparis_iptal",
+    "variations": [
+      "Siparişimi iptal etmek istiyorum",
+      "Yanlış ürün aldım, iptal edebilir miyim?",
+      "Siparişi durdurma şansım var mı?",
+      "Vazgeçtim, siparişi iptal eder misiniz?"
+    ],
+    "response": "Siparişiniz henüz kargoya verilmediyse iptal işlemi gerçekleştirilebilmektedir. Sipariş No bilginizi bizimle paylaşırsanır talebiniz değerlendirilecektir."
+  },
+  {
+    "id": 22,
+    "department": "Müşteri Hizmetleri",
+    "intent": "iade_sureci",
+    "variations": [
+      "Ürünü iade etmek istiyorum",
+      "İade nasıl yapılır?",
+      "Aldığım ürünü geri gönderebilir miyim?",
+      "İade süreci nedir?"
+    ],
+    "response": "İade işlemlerinizi teslim tarihinden itibaren belirlenen süre içerisinde gerçekleştirebilirsiniz. İade koşulları ve adımları web sitemizde detaylı olarak yer almaktadır."
+  },
+  {
+    "id": 23,
+    "department": "Müşteri Hizmetleri",
+    "intent": "degisim_talebi",
+    "variations": [
+      "Beden değişimi yapmak istiyorum",
+      "Ürünü değiştirebilir miyim?",
+      "Farklı bedenle değiştirmek istiyorum",
+      "Değişim mümkün mü?",
+      "Sipariş ettiğimden farklı renkte geldi",
+      "Ürün benim sipariş ettiğim gibi değil, değiştirebilir miyim?"
+    ],
+    "response": "Değişim talepleriniz ürünün uygunluk durumuna göre değerlendirilmektedir. Süreç hakkında detaylı bilgi tarafınıza iletilecektir."
+  },
+  {
+    "id": 24,
+    "department": "Teknik Destek",
+    "intent": "uyelik_sorunu",
+    "variations": [
+      "Hesabıma giriş yapamıyorum",
+      "Şifremi unuttum ne yapmalıyım?",
+      "Üyeliğime erişemiyorum",
+      "Giriş sorunu yaşıyorum"
+    ],
+    "response": "Üyelik işlemlerinizle ilgili sorunlarınız için şifre yenileme adımını deneyebilirsiniz. Sorunun devam etmesi halinde destek ekibimiz sizinle ilgilenecektir."
+  },
+  {
+    "id": 25,
+    "department": "Müşteri Hizmetleri",
+    "intent": "kampanya_sorusu",
+    "variations": [
+      "Kampanyalarınız neler?",
+      "İndirim var mı?",
+      "Aktif kampanya bulunuyor mu?",
+      "Kupon kodu var mı?"
+    ],
+    "response": "Güncel kampanya ve indirimlerimizi web sitemizin ana sayfasından takip edebilirsiniz. Belirli dönemlerde özel fırsatlar sunulmaktadır."
+  },
+  {
+    "id": 26,
+    "department": "Müşteri Hizmetleri",
+    "intent": "siparis_duzenleme",
+    "variations": [
+      "Siparişimde değişiklik yapabilir miyim?",
+      "Yanlış ürün seçtim, düzeltebilir misiniz?",
+      "Sipariş içeriğini güncellemek istiyorum",
+      "Sepetteki ürünleri değiştirebilir miyim?"
+    ],
+    "response": "Siparişiniz henüz işleme alınmadıysa düzenleme talebiniz değerlendirilebilmektedir. Lütfen sipariş numaranızı paylaşınız."
+  },
+  {
+    "id": 27,
+    "department": "Müşteri Hizmetleri",
+    "intent": "tekrar_siparis",
+    "variations": [
+      "Aynı ürünü tekrar sipariş etmek istiyorum",
+      "Daha önce aldığım ürünü yeniden alabilir miyim?",
+      "Tekrar sipariş oluşturabilir miyim?",
+      "Ürünü yeniden nasıl satın alırım?"
+    ],
+    "response": "Daha önce satın aldığınız ürünü stok durumuna bağlı olarak yeniden sipariş verebilirsiniz. Ürün sayfası üzerinden tekrar işlem oluşturabilirsiniz."
+  },
+  {
+    "id": 28,
+    "department": "Müşteri Hizmetleri",
+    "intent": "hediye_paketi",
+    "variations": [
+      "Hediye paketi yapıyor musunuz?",
+      "Ürünü paketletmek mümkün mü?",
+      "Özel paket seçeneği var mı?",
+      "Hediye gönderimi yapılabilir mi?"
+    ],
+    "response": "Hediye paketi ve özel paketleme için sipariş sayfasında yer alan 'Hediye Paketi' adındaki sanal ürünü ekstra olarak sipariş geçmeniz ve isteğiniz paketlemeyi sipariş notuna eklemeniz gerekmektedir."
+  },
+  {
+    "id": 29,
+    "department": "Finans",
+    "intent": "fatura_talebi",
+    "variations": [
+      "Faturamı nereden alırım?",
+      "Fatura gönderebilir misiniz?",
+      "E-faturaya ulaşamıyorum",
+      "Fatura talep etmek istiyorum"
+    ],
+    "response": "Faturanız, siparişinizin ardından kayıtlı e-posta adresinize iletilmektedir. Ulaşmadıysa lütfen spam klasörünüzü de kontrol ediniz."
+  },
+  {
+    "id": 30,
+    "department": "Müşteri Hizmetleri",
+    "intent": "adres_kaydi",
+    "variations": [
+      "Adres kaydımı güncellemek istiyorum",
+      "Yeni adres ekleyebilir miyim?",
+      "Fatura adresini değiştirebilir miyim?",
+      "Teslimat adresini kaydetmek istiyorum"
+    ],
+    "response": "Adres bilgileriniz hesabınız üzerinden güncellenebilmektedir. profilim/adrelerim sayfasından gerekli düzenlemeleri yapabilirsiniz"
+  },
+  {
+    "id": 31,
+    "department": "Müşteri Hizmetleri",
+    "intent": "uygun_beden_tavsiyesi",
+    "variations": [
+      "Hangi bedeni almalıyım?",
+      "Beden konusunda yardımcı olur musunuz?",
+      "Bana uygun ölçü hangisi olur?",
+      "Doğru bedeni nasıl seçebilirim?"
+    ],
+    "response": "Beden seçimi konusunda /yardim/beden-karsilastirma sayfasında yer alan beden karşılaştırma tablosunu inceleyebilirsiniz. Ayrıca ürün sayfalarında bulunan beden ölçüleri de seçim yapmanıza yardımcı olacaktır."
+  },
+  {
+    "id": 32,
+    "department": "Müşteri Hizmetleri",
+    "intent": "stok_bilgisi",
+    "variations": [
+      "Ürün tekrar stoklara gelir mi?",
+      "İstediğim ürün stokta yok",
+      "Ne zaman yeniden stoklanır?",
+      "Stok durumu hakkında bilgi alabilir miyim?"
+    ],
+    "response": "Stok durumu ürün bazında değişiklik gösterebilmektedir. Ürün sayfasındaki 'Stoğa gelince haber ver' seçeneği ile stok gelince bildirim alabilirsiniz."
+  },
+  {
+    "id": 33,
+    "department": "Müşteri Hizmetleri",
+    "intent": "yeni_uyelik",
+    "variations": [
+      "Nasıl üye olabilirim?",
+      "Kayıt işlemi nereden yapılır?",
+      "Yeni hesap açmak istiyorum",
+      "Üyelik oluşturma adımı nedir?"
+    ],
+    "response": "Yeni üyelik oluşturmak için web sitemizde yer alan kayıt formunu doldurmanız yeterlidir. İşlem tamamlandığında hesabınız aktif olacaktır."
+  },
+  {
+    "id": 34,
+    "department": "Müşteri Hizmetleri",
+    "intent": "siparis_notu",
+    "variations": [
+      "Siparişe not ekleyebilir miyim?",
+      "Kargoya özel not yazmak istiyorum",
+      "Sipariş notu bırakma alanı var mı?",
+      "Mesaj eklemek mümkün mü?"
+    ],
+    "response": "Sipariş notunuzunu sipariş oluşturma adımında 'Sipariş Notu' bölümüne ekleyebilirsiniz. Çalışan arkadaşlarımıza iletilmek üzere talebiniz dikkate alınacaktır."
+  },
+  {
+    "id": 35,
+    "department": "Lojistik",
+    "intent": "teslimat_oncesi_iletisim",
+    "variations": [
+      "Kuryeyle iletişim kurabilir miyim?",
+      "Teslimattan önce arama yapılır mı?",
+      "Kargo firmasına ulaşabilir miyim?",
+      "Teslimat öncesi bilgilendirme var mı?"
+    ],
+    "response": "SMS olarak gelen anlaşmalı kargo firmamız ve teslimat kodunuz ile kargo firması üzerinden iletişime geçmenizi öneririz."
+  },
+  {
+    "id": 36,
+    "department": "Müşteri Hizmetleri",
+    "intent": "musteri_memnuniyeti",
+    "variations": [
+      "Şikayetimi iletmek istiyorum",
+      "Memnun kalmadım",
+      "Geri bildirimde bulunmak istiyorum",
+      "Sorunumu kime bildireceğim?"
+    ],
+    "response": "Görüş ve geri bildiriminiz bizim için değerlidir. enis.destek@gmail.com adresine gönderdiğiniz her öneri ve şikayetiniz ilgili birime aktarılacak ve en kısa sürede değerlendirme yapılacaktır."
+  },
+  {
+    "id": 37,
+    "department": "Müşteri Hizmetleri",
+    "intent": "siparis_hazirmi",
+    "variations": [
+      "Siparişim hazırlandı mı?",
+      "Sipariş iptal mi oldu?",
+      "Sipariş durumu ne?",
+      "Siparişim işleme alındı mı?",
+      "Sipariş neden hala onaylanmadı?"
+    ],
+    "response": "Siparişinizin onay durumu sistemimizde kayıtlıdır. Onay e-postası tarafınıza iletilmiş olabilir; lütfen gelen kutunuzu kontrol ediniz."
+  },
+  {
+    "id": 38,
+    "department": "Teknik Destek",
+    "intent": "odeme_sorunu",
+    "variations": [
+      "Ödeme başarısız oldu",
+      "Kartım çekmedi",
+      "Ödeme ekranında hata alıyorum",
+      "Siparişim ödenmedi görünüyor"
+    ],
+    "response": "Ödeme işleminiz sırasında oluşan hata için üzgünüz. Kart bilgilerinizi ve banka onayınızı kontrol ederek işlemi tekrar deneyebilirsiniz."
+  },
+  {
+    "id": 39,
+    "department": "Müşteri Hizmetleri",
+    "intent": "siparis_numarasi_bulma",
+    "variations": [
+      "Sipariş numaramı nereden bulurum?",
+      "Numaramı göremiyorum",
+      "Sipariş kodu nerede yazar?",
+      "Sipariş referansımı nasıl öğrenirim?"
+    ],
+    "response": "Sipariş numaranız, onay e-postası ve hesap paneliniz üzerinden görüntülenebilmektedir. E-postalarınızı kontrol etmenizi rica ederiz."
+  },
+  {
+    "id": 40,
+    "department": "Müşteri Hizmetleri",
+    "intent": "iletisim_talebi",
+    "variations": [
+      "Bir temsilciyle görüşebilir miyim?",
+      "Canlı destek var mı?",
+      "İnsan temsilciye bağlanmak istiyorum",
+      "Destek ekibiyle iletişime geçebilir miyim?"
+    ],
+    "response": "Talebiniz ilgili destek ekibine iletilecektir. En kısa sürede tarafınıza dönüş sağlanması için kayıt oluşturulmuştur."
+  },
+
+  {
+    "id": 41,
+    "department": "Teknik Destek",
+    "intent": "site_acilmiyor",
+    "variations": [
+      "Site açılmıyor",
+      "Web sitesine giremiyorum",
+      "Sayfa yüklenmiyor",
+      "Ana sayfaya ulaşamıyorum",
+      "Sepetim sayfasında çok kasıyor",
+      "3D doğrulama çalışmıyor",
+      "503 hatası çıkıyor",
+      "Mobil uygulamanız çalışmıyor",
+      "X hatası alıyorum",
+      "Sistemde sorun var",
+      "X Error kodu veriyor"
+    ],
+    "response": "Karşılaştığınız erişim sorunu için üzgünüz. Şikayetiniz teknik ekibimize iletilmiştir ve en kısa sürede çözüm sağlanması için çalışılmaktadır. Sizler de mümkün ise farklı bir tarayıcıdan veya cihazdan erişim sağlamayı deneyebilirsiniz."
+  },
+  {
+    "id": 42,
+    "department": "Teknik Destek",
+    "intent": "giris_sorunu",
+    "variations": [
+      "Hesabıma giriş yapamıyorum",
+      "Şifrem doğru ama kabul etmiyor",
+      "Oturum açılmıyor",
+      "Login sorunu yaşıyorum"
+    ],
+    "response": "Giriş sorununuz için üzgünüz. Şifrenizi sıfırlamayı deneyebilir, sorunun devam etmesi halinde destek ekibimizden yardım alabilirsiniz."
+  },
+  {
+    "id": 43,
+    "department": "Teknik Destek",
+    "intent": "sms_kod_gelmedi",
+    "variations": [
+      "Doğrulama kodu gelmedi",
+      "SMS ulaşmadı",
+      "Şifre sıfırlama kodu gelmiyor",
+      "Telefonuma kod düşmedi"
+    ],
+    "response": "Doğrulama kodu gecikmesi yaşanabiliyor. Telefon numaranızın doğru olduğundan emin olduktan sonra işlemi yeniden deneyiniz."
+  },
+  {
+    "id": 44,
+    "department": "Teknik Destek",
+    "intent": "email_gelmedi",
+    "variations": [
+      "Mail gelmedi",
+      "Onay e-postası ulaşmadı",
+      "Şifre sıfırlama maili gelmedi",
+      "Bildirim e-postası görünmüyor"
+    ],
+    "response": "E-posta ulaşmaması durumunda spam veya gereksiz klasörünüzü kontrol etmenizi öneririz. Sorun sürerse kayıtlı adresinizin doğruluğunu inceleyebiliriz."
+  },
+  {
+    "id": 45,
+    "department": "Teknik Destek",
+    "intent": "site_hatasi",
+    "variations": [
+      "Bir hata oluştu",
+      "Sayfada teknik sorun var",
+      "Hata mesajı alıyorum",
+      "Uygulama çalışmıyor"
+    ],
+    "response": "Teknik aksaklık nedeniyle yaşadığınız sorun için özür dileriz. Lütfen hata ekranının görüntüsünü bizimle paylaşınız; gerekli inceleme yapılacaktır."
+  },
+  {
+    "id": 46,
+    "department": "Teknik Destek",
+    "intent": "uygulama_hatasi",
+    "variations": [
+      "Mobil uygulama açılmıyor",
+      "Uygulama donuyor",
+      "App hata veriyor",
+      "Telefonumda uygulama çalışmıyor"
+    ],
+    "response": "Mobil uygulamada yaşadığınız sorun için üzgünüz. Uygulamayı güncellemenizi, önbelleği temizlemenizi ve yeniden giriş yapmanızı öneririz. Sorun devam ederse cihaz modeliniz ve uygulama sürümünüzle birlikte destek ekibimize başvurabilirsiniz."
+  },
+  {
+    "id": 47,
+    "department": "Teknik Destek",
+    "intent": "odeme_sayfasi_acilmiyor",
+    "variations": [
+      "Ödeme sayfası açılmıyor",
+      "Kart ekranına geçemiyorum",
+      "Checkout hata veriyor",
+      "Ödeme adımında takılı kaldım"
+    ],
+    "response": "Ödeme ekranına erişimde yaşadığınız sorun için özür dileriz. Şikayetiniz teknik ekibimize iletilmiştir ve en kısa sürede çözüm sağlanması için çalışılmaktadır. Sizler de mümkün ise farklı bir banka ve kart seçerek işlemi yeniden deneyebilirsiniz."
+  },
+  {
+    "id": 48,
+    "department": "Teknik Destek",
+    "intent": "sepet_kayboldu",
+    "variations": [
+      "Sepetimdeki ürünler silindi",
+      "Sepet boş görünüyor",
+      "Ürünlerim kayboldu",
+      "Sepet kayıtlı değil"
+    ],
+    "response": "Sepet içeriğinin görünmemesi geçici bir teknik durumdan kaynaklanabilir. Hesabınıza yeniden giriş yapmayı ve sayfayı yenilemeyi deneyiniz."
+  },
+  {
+    "id": 49,
+    "department": "Teknik Destek",
+    "intent": "kupon_calismiyor",
+    "variations": [
+      "Kupon kodu çalışmıyor",
+      "İndirim kodu kabul edilmiyor",
+      "Promosyon kodu hata veriyor",
+      "Kuponum geçersiz görünüyor"
+    ],
+    "response": "Kupon kodunuzun geçerlilik süresi, kullanım koşulları ve ürün uygunluğu kontrol edilmelidir. Sorun devam ederse kod detaylarını iletebilirsiniz."
+  },
+  {
+    "id": 50,
+    "department": "Teknik Destek",
+    "intent": "urun_sayfasi_acilmiyor",
+    "variations": [
+      "Ürün sayfası açılmıyor",
+      "Bir ürünün detayını göremiyorum",
+      "Sayfa yüklenmiyor",
+      "Ürün bilgilerine erişemiyorum"
+    ],
+    "response": "Ürün sayfasının açılmaması teknik bir görüntüleme sorunundan kaynaklanabilir. Lütfen sayfayı yenileyerek tekrar deneyiniz."
+  },
+  {
+    "id": 51,
+    "department": "Teknik Destek",
+    "intent": "resim_yuklenmiyor",
+    "variations": [
+      "Ürün görselleri görünmüyor",
+      "Fotoğraflar yüklenmiyor",
+      "Resimler açılmıyor",
+      "Görseller boş geliyor"
+    ],
+    "response": "Görsellerin yüklenmemesi bağlantı veya tarayıcı kaynaklı olabilir. Sayfayı yenilemeyi ya da farklı bir cihazdan erişmeyi deneyiniz. Devam etmesi takdirde enis.destek@gmail.com adresine ekran görüntüsü ile birlikte bildirebilirsiniz."
+  },
+  {
+    "id": 52,
+    "department": "Teknik Destek",
+    "intent": "filtre_sorunu",
+    "variations": [
+      "Filtreler çalışmıyor",
+      "Ürünleri süzemiyorum",
+      "Beden filtresi hata veriyor",
+      "Arama sonuçları yanlış geliyor"
+    ],
+    "response": "Filtreleme sorunu için teşekkür ederiz. Tarayıcı önbelleğini temizledikten sonra işlemi tekrar deneyiniz; sorun devam ederse ekran görüntüsü iletebilirsiniz."
+  },
+  {
+    "id": 53,
+    "department": "Teknik Destek",
+    "intent": "sunucu_hatasi",
+    "variations": [
+      "Sunucu hatası alıyorum",
+      "Site çöküyor",
+      "Hizmete erişilemiyor",
+      "503 hatası çıkıyor"
+    ],
+    "response": "Sunucu kaynaklı kesinti nedeniyle yaşanan sorun için özür dileriz. Teknik ekibimiz konu üzerinde çalışmaktadır."
+  },
+  {
+    "id": 54,
+    "department": "Teknik Destek",
+    "intent": "hesap_baglama_sorunu",
+    "variations": [
+      "Hesabımı bağlayamıyorum",
+      "Sosyal giriş çalışmıyor",
+      "Google ile giriş olmuyor",
+      "Hesap eşleştirme hatası veriyor"
+    ],
+    "response": "Hesap bağlantı sorununuz için üzgünüz. Lütfen farklı bir tarayıcıyla deneyiniz. Hatanın devam etmesi durumunda ekran görüntüsü ve hata kodu ile birlikte enis.destek@gmail.com adresine bildirebilirsiniz."
+  },
+  {
+    "id": 55,
+    "department": "Teknik Destek",
+    "intent": "sifre_sifirlama",
+    "variations": [
+      "Şifremi sıfırlayamıyorum",
+      "Parola yenileme çalışmıyor",
+      "Yeni şifre belirleyemiyorum",
+      "Şifre değiştirme sayfası açılmıyor"
+    ],
+    "response": "Şifre sıfırlama sürecinde yaşanan aksaklık için özür dileriz. Linkin süresi dolmuş olabilir; lütfen yeniden talep oluşturunuz. Hatanın devam etmesi durumunda ekran görüntüsü ve hata kodu ile birlikte enis.destek@gmail.com adresine bildirebilirsiniz."
+  },
+  {
+    "id": 56,
+    "department": "Teknik Destek",
+    "intent": "mobil_uyum_sorunu",
+    "variations": [
+      "Telefonda düzgün görünmüyor",
+      "Mobilde sayfa bozuk",
+      "Ekran kayıyor",
+      "Telefonumda site kullanışsız"
+    ],
+    "response": "Mobil görünümle ilgili geri bildiriminiz alınmıştır. Farklı bir tarayıcı deneyebilir, sorunun devam etmesi durumunda marka model bilgisi ile birlikte destek ekibimize iletebilirsiniz."
+  },
+  {
+    "id": 57,
+    "department": "Teknik Destek",
+    "intent": "site_yavas",
+    "variations": [
+      "Site çok yavaş",
+      "Sayfalar geç açılıyor",
+      "Uygulama ağır çalışıyor",
+      "Performans sorunu var"
+    ],
+    "response": "Yavaşlık sorunu için üzgünüz. İnternet bağlantınızı kontrol edip sayfayı yeniden yüklemenizi öneririz. Sorunun internetten kaynaklanmadığından eminseniz, marka model bilgisi ile birlikte destek ekibimize iletebilirsiniz."
+  },
+  {
+    "id": 58,
+    "department": "Teknik Destek",
+    "intent": "tarayici_uyumsuzlugu",
+    "variations": [
+      "Tarayıcı uyumlu değil sanırım",
+      "Chrome'da açılmıyor",
+      "Safari'de sorun var",
+      "Eski tarayıcıda hata veriyor"
+    ],
+    "response": "Tarayıcı uyumluluğu nedeniyle sorun yaşıyor olabilirsiniz. Güncel bir tarayıcı kullanarak tekrar denemenizi tavsiye ederiz."
+  },
+  {
+    "id": 59,
+    "department": "Teknik Destek",
+    "intent": "odeme_guvenlik_kontrolu",
+    "variations": [
+      "Ödeme sırasında güvenlik hatası alıyorum",
+      "3D doğrulama çalışmıyor",
+      "Kart doğrulaması geçmiyor",
+      "Güvenlik kontrolünde takıldı"
+    ],
+    "response": "Güvenlik doğrulama adımında yaşanan sorun için üzgünüz. Bankanızla iletişime geçerek kartınızın online işlemlere açık olduğunu teyit edebilirsiniz."
+  },
+  {
+    "id": 60,
+    "department": "Teknik Destek",
+    "intent": "ekran_hatasi",
+    "variations": [
+      "Ekran bozuldu",
+      "Yazılar kaymış",
+      "Sayfa hizası bozuk",
+      "Arayüz düzgün görünmüyor"
+    ],
+    "response": "Arayüz görüntüleme sorunu için teşekkür ederiz. Tarayıcı yakınlaştırmasını sıfırlayarak veya farklı bir cihazdan erişerek kontrol sağlayabilirsiniz."
+  },
+
+  {
+    "id": 61,
+    "department": "Finans",
+    "intent": "fatura_talebi",
+    "variations": [
+      "Faturamı gönderebilir misiniz?",
+      "E-faturaya ulaşamıyorum",
+      "Fatura nereden alınır?",
+      "Fatura talep etmek istiyorum"
+    ],
+    "response": "Faturanız, siparişinizin ardından kayıtlı e-posta adresinize iletilmektedir. Ulaşmadıysa lütfen spam klasörünüzü de kontrol ediniz."
+  },
+  {
+    "id": 62,
+    "department": "Finans",
+    "intent": "odeme_basarili_mi",
+    "variations": [
+      "Ödemem geçti mi?",
+      "Kartımdan çekim yapıldı mı?",
+      "Sipariş ücreti alındı mı?",
+      "Ödeme onaylandı mı?"
+    ],
+    "response": "Ödemeniz sistemimizde başarıyla görünüyorsa siparişiniz işleme alınmış olacaktır. Detaylı kontrol için sipariş numaranızı paylaşabilirsiniz."
+  },
+  {
+    "id": 63,
+    "department": "Finans",
+    "intent": "iade_ucreti",
+    "variations": [
+      "İade param ne zaman yatacak?",
+      "Geri ödeme ne zaman yapılır?",
+      "Para iadesi hangi sürede tamamlanır?",
+      "Ücret iadesi ne zaman hesabıma geçer?"
+    ],
+    "response": "İade tutarınız, ürünün depomuza ulaşması ve kontrol sürecinin tamamlanmasının ardından bankacılık süreçlerine göre hesabınıza 1 ila 3 iş günü içerisinde yansıtılmaktadır."
+  },
+  {
+    "id": 64,
+    "department": "Finans",
+    "intent": "cifte_cekim",
+    "variations": [
+      "Kartımdan iki kez çekim yapılmış",
+      "Mükerrer ödeme görünüyor",
+      "Aynı işlem iki kere geçti",
+      "Çift tahsilat var gibi görünüyor"
+    ],
+    "response": "Çift çekim şüpheniz için üzgünüz. İşlem dekontunu ve sipariş numaranızı paylaşmanız halinde inceleme başlatılacaktır."
+  },
+  {
+    "id": 65,
+    "department": "Finans",
+    "intent": "fatura_duzeltme",
+    "variations": [
+      "Faturadaki bilgiyi değiştirmek istiyorum",
+      "Vergi numaram yanlış yazılmış",
+      "Fatura adresi hatalı",
+      "Faturamı düzeltir misiniz?"
+    ],
+    "response": "Fatura bilgilerinde düzeltme talebiniz için sipariş numaranızı ve doğru bilgileri iletmenizi rica ederiz. Uygunluk durumuna göre işlem yapılacaktır."
+  },
+  {
+    "id": 66,
+    "department": "Finans",
+    "intent": "kupon_indirim_farki",
+    "variations": [
+      "İndirim neden uygulanmadı?",
+      "Kupon tutarı düşmedi",
+      "Beklediğim indirim görünmüyor",
+      "Fiyat farkı neden var?"
+    ],
+    "response": "İndirim uygulaması kampanya koşullarına, ürün uygunluğuna ve ödeme adımındaki geçerlilik durumuna bağlı olabilir. Eğer Kuponunuzun geçerli olduğunu düşünüyorsanız, detayları ileterek inceleme talep edebilirsiniz."
+  },
+  {
+    "id": 67,
+    "department": "Finans",
+    "intent": "kart_hatasi",
+    "variations": [
+      "Kartım kabul edilmiyor",
+      "Kredi kartı ile ödeme yapamıyorum",
+      "Kart doğrulama hatası alıyorum",
+      "Kartım reddedildi"
+    ],
+    "response": "Kartınızın reddedilmesi banka kaynaklı veya işlem limitleriyle ilgili olabilir. Kart bilgilerinizin doğruluğunu kontrol ederek tekrar deneyiniz."
+  },
+  {
+    "id": 68,
+    "department": "Finans",
+    "intent": "taksit_sorusu",
+    "variations": [
+      "Taksit yapabiliyor musunuz?",
+      "Kaç taksit seçeneği var?",
+      "Ödeme taksitli olabilir mi?",
+      "Kredili ödeme var mı?"
+    ],
+    "response": "Taksit seçenekleri bankanıza ve ödeme yöntemine bağlı olarak değişebilmektedir. Ödeme ekranında size sunulan seçenekleri görüntüleyebilirsiniz."
+  },
+  {
+    "id": 69,
+    "department": "Finans",
+    "intent": "odeme_yontemi",
+    "variations": [
+      "Hangi ödeme yöntemleri var?",
+      "Havale ile ödeyebilir miyim?",
+      "Kart dışında seçenek var mı?",
+      "Nasıl ödeme yapabilirim?"
+    ],
+    "response": "Mevcut ödeme yöntemleri, sipariş ekranında size sunulmaktadır. Güncel seçenekleri ödeme aşamasında görüntüleyebilirsiniz."
+  },
+  {
+    "id": 70,
+    "department": "Finans",
+    "intent": "vergi_bilgisi",
+    "variations": [
+      "Vergi numaranız nedir?",
+      "Faturada hangi vergi bilgisi var?",
+      "Kurumsal fatura kesiyor musunuz?",
+      "Vergi bilgisi paylaşabilir misiniz?"
+    ],
+    "response": "Kurumsal fatura ve vergi bilgileri, sipariş aşamasında girilen bilgilere göre düzenlenmektedir. İlgili alanları kontrol etmenizi rica ederiz. Vergi numaramız: 1234567890"
+  },
+  {
+    "id": 71,
+    "department": "Finans",
+    "intent": "iade_karti",
+    "variations": [
+      "İade hangi karta yapılacak?",
+      "Geri ödeme eski karta mı döner?",
+      "Para iadesi nasıl olur?",
+      "İade hesaba mı karta mı geçer?"
+    ],
+    "response": "İade işlemleri, ödemenin yapıldığı kanal üzerinden gerçekleştirilir. Banka süreçlerine bağlı olarak yansıma süresi değişebilmektedir."
+  },
+  {
+    "id": 72,
+    "department": "Finans",
+    "intent": "odeme_beklemede",
+    "variations": [
+      "Ödemem beklemede görünüyor",
+      "Tahsilat tamamlanmadı mı?",
+      "Siparişim ödeme bekliyor",
+      "İşlem neden onaylanmadı?"
+    ],
+    "response": "Ödemenizin beklemede görünmesi bankacılık onay sürecinden kaynaklanabilir. Bir süre sonra tekrar kontrol etmenizi öneririz."
+  },
+  {
+    "id": 73,
+    "department": "Finans",
+    "intent": "dekont_talebi",
+    "variations": [
+      "Dekont gönderebilir misiniz?",
+      "Ödeme belgesine ihtiyacım var",
+      "Banka dekontu alabilir miyim?",
+      "Tahsilat belgesi talep ediyorum"
+    ],
+    "response": "Dekont veya ödeme belgesi talebiniz için sipariş numaranızı paylaşmanız yeterlidir. İlgili kayıtlar kontrol edilerek tarafınıza dönüş yapılacaktır."
+  },
+  {
+    "id": 74,
+    "department": "Finans",
+    "intent": "fiyat_itirazi",
+    "variations": [
+      "Fiyat neden değişti?",
+      "Sepette farklı tutar görünüyor",
+      "Ödeme tutarı neden yüksek?",
+      "Beklediğim fiyatla uyuşmuyor"
+    ],
+    "response": "Fiyat farklılıkları kampanya süresi, stok durumu veya kargo eklemelerine bağlı olabilir. Detaylı inceleme için sipariş bilgilerinizi iletebilirsiniz."
+  },
+  {
+    "id": 75,
+    "department": "Finans",
+    "intent": "kurumsal_fatura",
+    "variations": [
+      "Kurumsal fatura kesiyor musunuz?",
+      "Şirket adına fatura alabilir miyim?",
+      "Vergi levhasıyla fatura düzenlenir mi?",
+      "Firma bilgilerimle fatura istiyorum"
+    ],
+    "response": "Kurumsal fatura talepleriniz için şirket unvanı, vergi dairesi ve vergi numarası bilgilerine ihtiyaç duyulmaktadır. Sipariş aşamasında ilgili alanları doldurabilirsiniz."
+  },
+  {
+    "id": 76,
+    "department": "Finans",
+    "intent": "siparis_ucreti_uyusmazligi",
+    "variations": [
+      "Tutar neden farklı?",
+      "Sipariş fiyatı değişmiş",
+      "Neden ek ücret var?",
+      "Ödeme sırasında başka tutar çıktı"
+    ],
+    "response": "Tutar uyumsuzluğu kampanya, vergi veya teslimat koşullarından kaynaklanabilir. Sipariş detaylarınızı paylaşmanız halinde kontrol sağlanacaktır."
+  },
+  {
+    "id": 77,
+    "department": "Finans",
+    "intent": "peşinatsiz_ödeme",
+    "variations": [
+      "Peşinatsız ödeme var mı?",
+      "Ön ödeme zorunlu mu?",
+      "Kapora alıyor musunuz?",
+      "Ödeme tamamen sonradan yapılabilir mi?"
+    ],
+    "response": "Ödeme koşulları seçtiğiniz yöntem ve sipariş türüne göre değişiklik gösterebilmektedir. Güncel finansal seçenekleri ödeme ekranında görebilirsiniz."
+  },
+  {
+    "id": 78,
+    "department": "Finans",
+    "intent": "banka_havalesi",
+    "variations": [
+      "Havale ile ödeme yapabilir miyim?",
+      "EFT seçeneğiniz var mı?",
+      "Banka transferi kabul ediyor musunuz?",
+      "IBAN ile ödeme yapılabiliyor mu?"
+    ],
+    "response": "Banka havalesi veya EFT ile ödeme seçenekleri mevcutsa, ilgili bilgiler ödeme aşamasında paylaşılmaktadır. Detayları kontrol etmenizi rica ederiz."
+  },
+  {
+    "id": 79,
+    "department": "Finans",
+    "intent": "iptal_sonrasi_iade",
+    "variations": [
+      "İptal sonrası para ne zaman yatar?",
+      "Siparişi iptal ettim, ücret ne zaman döner?",
+      "İptal edilen siparişin iadesi ne kadar sürer?",
+      "İptal sonrası geri ödeme bekliyorum"
+    ],
+    "response": "İptal edilen siparişlerde iade süreci bankacılık işlem sürelerine bağlı olarak değişebilmektedir. Bu işlem genelde 5 ila 10 iş günü sürebilir. İşleminiz tamamlandığında tarafınıza bilgilendirme yapılacaktır."
+  },
+  {
+    "id": 80,
+    "department": "Finans",
+    "intent": "billing_support",
+    "variations": [
+      "Muhasebe desteği alabilir miyim?",
+      "Finans birimine bağlanmak istiyorum",
+      "Fatura ve ödeme için destek lazım",
+      "Ödeme kaydıyla ilgili yardım istiyorum"
+    ],
+    "response": "Finans ve muhasebe süreçlerinizle ilgili talebiniz kaydedilmiştir. İlgili birimimiz en kısa sürede tarafınıza dönüş sağlayacaktır."
+  }
+]

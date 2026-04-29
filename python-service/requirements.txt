@@ -5,3 +5,7 @@ requests
 huggingface_hub
 python-dotenv
 google-genai
+
+sentence-transformers==3.0.1
+psycopg2-binary==2.9.9
+groq==0.9.0
