@@ -14,11 +14,11 @@ SSS:
 def chat(brand_name: str, message: str, faq_results: list[dict], history: list[dict]) -> str:
     context = "\n".join(
         f"[{r['department']}] {r['response']}" for r in faq_results
-    ) or "Bu konuda SSS'de bilgi yok."
+    ) or "Bu konuda Sıkça Sorulan Sorular'da bilgi yok."
 
-    messages = history[-10:] + [{"role": "user", "content": message}]
+    messages = history[-10:] + [{"role": "user", "content": message}]   # last 10 messages should be 
 
-    res = client.chat.completions.create(
+    res = client.chat.completions.create(                               # request to groq
         model="llama-3.3-70b-versatile",
         messages=[
             {"role": "system", "content": SYSTEM.format(brand_name=brand_name, context=context)},

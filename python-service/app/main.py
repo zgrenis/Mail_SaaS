@@ -9,7 +9,7 @@ load_dotenv()
 
 app = FastAPI(title="Python Model Service")
 
-# ── Routers ──────────────────────────────────────────
+# ───────────── Routers ──────────────────────
 app.include_router(hf_classifier_route.router)
 app.include_router(rag_route.router)
 
@@ -26,5 +26,5 @@ if __name__ == "__main__":
         "app.main:app",
         host="0.0.0.0",
         port=10000,
-        reload=False
+        reload=True
     )

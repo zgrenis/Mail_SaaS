@@ -2,8 +2,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from app.models.chat_model import ChatRequest
-from app.models.faq_model import IndexRequest
-from app.services.vector_search_service import search_faq, insert_faq_embeddings
+from app.services.vector_search_service import search_faq
 from app.services.rag_service import chat as rag_chat
 
 router = APIRouter()
@@ -21,8 +20,3 @@ async def chat_endpoint(req: ChatRequest):
     )
 
 
-# route for admin to index faq data (adding new faq data to vector database)
-@router.post("/index-faq")
-async def index_faq(req: IndexRequest):
-    insert_faq_embeddings([i.model_dump() for i in req.faq_data])
-    return {"status": "ok", "indexed": len(req.faq_data)}
