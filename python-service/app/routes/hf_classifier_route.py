@@ -4,7 +4,7 @@ from app.services.hf_classifier_service import classify_text
 
 router = APIRouter(prefix="/classify")
 
-@router.post("/")
+@router.post("")
 def classify(item: InputText):
     result = classify_text(item.text)
     return result
