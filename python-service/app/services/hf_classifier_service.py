@@ -90,7 +90,7 @@ Sadece düzeltilmiş metni döndür.
     gemini_text = call_gemini_with_fallback(prompt)
 
     if gemini_text:
-        # ---- Duyguyu çıkar ----
+        # ---- Separate the emotion from the fixed text ----
         end_idx = gemini_text.rfind(")")
         start_idx = gemini_text.rfind("(", 0, end_idx)
 
@@ -99,7 +99,7 @@ Sadece düzeltilmiş metni döndür.
             fixed_text = (gemini_text[:start_idx] + gemini_text[end_idx + 1:]).strip()
         else:
             fixed_text = gemini_text
-    # else: fixed_text = input_text (zaten default)
+    
 
     # ---- HF Space Classification ----
     try:
