@@ -8,7 +8,7 @@ Kullanıcıların Gmail hesaplarını bağlayarak gelen mailleri otomatik olarak
 
 ```
 ┌─────────────────┐     ┌─────────────────────┐     ┌──────────────────────────┐
-│  WordPress      │────▶│  Node.js Backend     │────▶│  Python FastAPI          │
+│  React (Vite)   │────▶│  Node.js Backend     │────▶│  Python FastAPI          │
 │  Frontend       │     │  (Render.com)        │     │  (HuggingFace Spaces)    │
 └─────────────────┘     └──────────┬──────────┘     └──────────────────────────┘
                                    │                           │
@@ -41,6 +41,14 @@ Kullanıcıların Gmail hesaplarını bağlayarak gelen mailleri otomatik olarak
 ## 📁 Proje Yapısı
 
 ```
+frontend/                         # React Vite Frontend
+├── src/
+│   ├── components/               # Tekrar kullanılabilir UI bileşenleri
+│   ├── pages/                    # Sayfalar (Dashboard, Login, vb.)
+│   └── store/                    # Redux state yönetimi
+├── .env
+└── package.json
+
 backend/                          # Node.js API
 ├── config/
 │   ├── db.js                     # PostgreSQL bağlantısı
@@ -133,7 +141,26 @@ python-service/                   # FastAPI sınıflandırma servisi
 - Google Cloud hesabı
 - HuggingFace hesabı
 
-### 1. Backend kurulumu
+### 1. Frontend kurulumu
+
+```bash
+cd frontend
+npm install
+```
+
+`.env` dosyası oluştur:
+
+```env
+VITE_BACKEND_URL=http://localhost:5000
+```
+
+Frontend'i başlat:
+
+```bash
+npm run dev
+```
+
+### 2. Backend kurulumu
 
 ```bash
 cd backend
@@ -171,7 +198,7 @@ teknik_destek_mail=teknik@sirket.com
 HF_SPACE_URL=https://enis10-bitirme-siniflandirma-api.hf.space/classify/
 ```
 
-### 2. Veritabanı kurulumu
+### 3. Veritabanı kurulumu
 
 ```sql
 -- Mail token kolonları
@@ -194,7 +221,7 @@ CREATE TABLE processed_emails (
 );
 ```
 
-### 3. Python servisi (HuggingFace Spaces)
+### 4. Python servisi (HuggingFace Spaces)
 
 HuggingFace Spaces'e deploy edilmiştir. Lokal çalıştırmak için:
 
@@ -213,7 +240,7 @@ HOST=127.0.0.1
 PORT=8000
 ```
 
-### 4. Google Cloud Console ayarları
+### 5. Google Cloud Console ayarları
 
 1. [console.cloud.google.com](https://console.cloud.google.com) → Yeni proje oluştur
 2. **APIs & Services → Library** → Gmail API aktif et
@@ -250,6 +277,10 @@ DB'deki kayıt department bilgisiyle güncellenir
 
 ## 🌐 Deploy
 
+### Frontend (Vercel / Netlify vb.)
+
+React uygulaması Vercel, Netlify veya Render.com üzerinde kolayca deploy edilebilir. Environment variables içerisine `VITE_BACKEND_URL` eklenmelidir. Build komutu olarak `npm run build`, çıktı klasörü olarak da `dist` ayarlaması yapılmalıdır.
+
 ### Backend (Render.com)
 
 Render.com üzerinde Web Service olarak deploy edilir. Environment variables Render dashboard'dan eklenir.
@@ -275,6 +306,8 @@ Docker SDK ile HuggingFace Spaces'e deploy edilir. Secrets olarak `HF_ID` ve `GE
 ---
 
 ## 📦 Kullanılan Teknolojiler
+
+**Frontend:** React 19, Vite, Tailwind CSS 4, Redux Toolkit, Framer Motion, Chart.js
 
 **Backend:** Node.js, Express, PostgreSQL, node-cron, googleapis, jsonwebtoken, bcrypt
 
