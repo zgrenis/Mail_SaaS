@@ -13,11 +13,6 @@ app = FastAPI(title="Python Model Service")
 app.include_router(hf_classifier_route.router)
 app.include_router(rag_route.router)
 
-# Health check
-@app.get("/hello")
-def hello():
-    return {"message": "Hello from Python FastAPI!"}
-
 
 # to run shortly = python -m app.main
 if __name__ == "__main__":

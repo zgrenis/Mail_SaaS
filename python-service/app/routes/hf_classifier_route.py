@@ -5,6 +5,6 @@ from app.services.hf_classifier_service import classify_text
 router = APIRouter()
 
 @router.post("/classify")
-def classify(item: InputText):
-    result = classify_text(item.text)
+async def classify(item: InputText):
+    result = await classify_text(item.text)
     return result

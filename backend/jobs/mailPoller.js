@@ -84,7 +84,7 @@ async function classifyAndForward(user, email) {
                       <b>Olasılık:</b> ${result.score}<br/>
                       <b>Konu:</b> ${email.subject}<br/>
                       <b>Düzeltilmiş/Özet Mail:</b> ${result.fixed_text}<br/>
-                      <b>Duygu Durumu:</b> ${result.duygu}<br/>
+                      <b>Duygu Durumu:</b> ${result.emotion}<br/>
                       <b>Orijinal Mail:</b> ${email.body}
                     </td>
                   </tr>
