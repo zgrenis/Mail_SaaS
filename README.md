@@ -275,26 +275,7 @@ DB'deki kayıt department bilgisiyle güncellenir
 
 ---
 
-## 🌐 Deploy
 
-### Frontend (Vercel / Netlify vb.)
-
-React uygulaması Vercel, Netlify veya Render.com üzerinde kolayca deploy edilebilir. Environment variables içerisine `VITE_BACKEND_URL` eklenmelidir. Build komutu olarak `npm run build`, çıktı klasörü olarak da `dist` ayarlaması yapılmalıdır.
-
-### Backend (Render.com)
-
-Render.com üzerinde Web Service olarak deploy edilir. Environment variables Render dashboard'dan eklenir.
-
-`GOOGLE_REDIRECT_URI` production'da güncellenmeli:
-```
-GOOGLE_REDIRECT_URI=https://mail-saas-backend.onrender.com/api/gmail/callback
-```
-
-### Python Servisi (HuggingFace Spaces)
-
-Docker SDK ile HuggingFace Spaces'e deploy edilir. Secrets olarak `HF_ID` ve `GEMINI_API_KEY` eklenir.
-
----
 
 ## 🔒 Güvenlik
 
