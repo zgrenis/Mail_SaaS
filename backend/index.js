@@ -26,6 +26,10 @@ app.use('/api/gmail', gmailRoutes);                     // Use gmail routes with
 const contactRoutes = require("./routes/contact.routes");
 app.use("/api/contact", contactRoutes);
 
+const chatRoutes = require("./routes/chat.routes");
+app.use("/api/chat", chatRoutes);
+
+
 const { startMailPoller } = require('./jobs/mailPoller');  // Start the mail poller cron job 
 startMailPoller();           // Start the mail poller cron job to check for new emails every 5 minutes
 

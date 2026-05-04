@@ -7,7 +7,7 @@ from app.services.embedding_service import embed_text
 
 logger = logging.getLogger(__name__)        #? it will show errors and infos
 
-
+# Connection pool to manage database connections
 _pool: pool.SimpleConnectionPool | None = None  #? lazy loading connection pool
 def get_pool():
     global _pool

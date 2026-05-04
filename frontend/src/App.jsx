@@ -14,6 +14,7 @@ import About from './pages/About';
 import PrivacyPolicy from './pages/Privacy';
 import Terms from './pages/Term';
 import Contact from './pages/Contact';
+import Chatbot from './pages/Chatbot';
 
 // Giriş kontrolü yapan koruyucu bileşen
 const ProtectedRoute = ({ children }) => {
@@ -46,6 +47,7 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/chatbot" element={<Chatbot />} />
 
           
           <Route 
@@ -53,14 +55,16 @@ function App() {
             element={
               <PrivateRoute >
                 <Dashboard />
+                
               </PrivateRoute>
             } 
           /> 
-
+    
           <Route path="*" element={<Navigate to="/login" replace />} />
+          
         </Routes>
       </main>
-
+      <Chatbot />
       <Footer />
     </div>
   );

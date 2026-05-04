@@ -17,9 +17,9 @@ client = None
 
 # Öncelik sırasına göre denenecek modeller
 FALLBACK_MODELS = [
-    "gemini-2.5-flash",        # Stabil, önerilen
-    "gemini-2.5-flash-lite",   # Daha hafif, düşük maliyet
-    "gemini-2.0-flash",        # Yedek (Haziran 2026'ya kadar)
+    "gemini-2.5-flash",        
+    "gemini-2.5-flash-lite",   
+    "gemini-2.0-flash",        
 ]
 
 # .env'den model ismi geldiyse listeye ekle
