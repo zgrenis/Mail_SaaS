@@ -38,6 +38,7 @@ async function markProcessed(userId, messageId, meta = {}) { //meta ={} prevent 
   );
 }
 
+//process and forward emails to relevant departments
 async function classifyAndForward(user, email) {
   let result = null; 
   

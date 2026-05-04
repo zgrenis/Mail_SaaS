@@ -121,20 +121,26 @@ export const fetchEmails = createAsyncThunk(
 
 export const resolveComplaint = createAsyncThunk(
   'auth/resolveComplaint',
-  async (messageId, { getState, rejectWithValue }) => {
+  async (messageId, { rejectWithValue }) => {
     try {
-      const token = getState().auth.token;
-      const res = await axios.patch(
-        `${BASE_URL}/api/gmail/emails/${messageId}/complaint`,
-        { complaint: false },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return { messageId, ...res.data };
+      const response = await fetch(`/api/gmail/emails/${messageId}/complaint`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`, // token nerede tutuyorsanız
+        },
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'İşlem başarısız.');
+
+      return data; // { success, message_id, complaint }
     } catch (err) {
-      return rejectWithValue(err.response?.data?.error || 'Güncelleme başarısız.');
+      return rejectWithValue(err.message);
     }
   }
 );
+
 
 
 // ─── Slice ────────────────────────────────────────────────────────────────────
@@ -277,9 +283,13 @@ const authSlice = createSlice({
 
 builder
   .addCase(resolveComplaint.fulfilled, (state, action) => {
-    const email = state.emails.find(e => e.message_id === action.payload.messageId);
-    if (email) email.complaint = false;
-  });
+  const { message_id, complaint } = action.payload;
+  const email = state.emails.find((e) => e.message_id === message_id);
+  if (email) email.complaint = complaint;
+})
+.addCase(resolveComplaint.rejected, (state, action) => {
+  state.error = action.payload;
+})
   },
 });
 

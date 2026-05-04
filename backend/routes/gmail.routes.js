@@ -82,34 +82,6 @@ router.get('/callback', async (req, res) => {
 });
 
 
-
-
-
-
-//? POST /api/gmail/send  just for test
-router.post('/send', authMiddleware, async (req, res) => {
-  const { to, subject, body } = req.body;
-
-  try {
-    const { rows } = await pool.query(
-      `SELECT id, gmail_address, mail_token, mail_access_token, mail_token_expiry
-       FROM users WHERE id=$1`,
-      [req.user.id]
-    );
-
-    const user = rows[0];
-    if (!user?.mail_token) {
-      return res.status(400).json({ error: 'Gmail hesabı bağlı değil' });
-    }
-
-    const result = await sendEmail(user, { to, subject, body });
-    res.json({ success: true, messageId: result.id });
-  } catch (err) {
-    console.error('[Gmail Send] Hata:', err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // GET /api/gmail/emails -> pull emails about loggined user
 router.get('/get-emails', authMiddleware, async (req, res) => {
   try {
@@ -124,5 +96,35 @@ router.get('/get-emails', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Mailler getirilirken bir hata oluştu.' });
   }
 });
+
+// PATCH /api/gmail/emails/:messageId/complaint — toggle complaint status
+router.patch('/emails/:messageId/complaint', authMiddleware, async (req, res) => {
+  try {
+    const { messageId } = req.params; // ← en üste taşı
+
+    const { rows } = await pool.query(
+      'SELECT complaint FROM processed_emails WHERE message_id=$1 AND user_id=$2',
+      [messageId, req.user.id]
+    );
+
+    if (!rows.length) {
+      return res.status(404).json({ error: 'Mail bulunamadı.' });
+    }
+
+    const newComplaint = !rows[0].complaint;
+
+    await pool.query(
+      'UPDATE processed_emails SET complaint=$1 WHERE message_id=$2 AND user_id=$3',
+      [newComplaint, messageId, req.user.id]
+    );
+
+    res.json({ success: true, message_id: messageId, complaint: newComplaint });
+  } catch (err) {
+    console.error('[Gmail Toggle Complaint] Hata:', err);
+    res.status(500).json({ error: 'Bildirim güncellenirken bir hata oluştu.' });
+  }
+});
+
+
 
 module.exports = router;
