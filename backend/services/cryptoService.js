@@ -9,7 +9,7 @@ function encrypt(text) {
   const cipher = crypto.createCipheriv(ALGORITHM, SECRET_KEY, iv); //encrypting model with algorithm, secret key and iv
   let encrypted = cipher.update(text, 'utf8', 'hex'); // text(utf8) to hex (with keys)
   encrypted += cipher.final('hex');  // finalizes encryption and processes remaining data blocks to hex even if there is no more data to encrypt we should finalize the encryption process
-  const authTag = cipher.getAuthTag().toString('hex'); // generates a unique authentication tag (security seal) to hex
+  const authTag = cipher.getAuthTag().toString('hex'); // generates a unique authentication tag (security seal) to hex. to prevent tampered data
   return `${iv.toString('hex')}:${authTag}:${encrypted}`; // packages iv, authTag, and encrypted data into a single colon-separated string
 }
 

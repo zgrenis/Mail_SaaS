@@ -22,15 +22,15 @@ router.get('/connect', authMiddleware, (req, res) => {
 router.get('/callback', async (req, res) => {
   try {
     const { code, state } = req.query; // code is the authorization apply code for one usage ...?code=4/0..
-  const userId = parseInt(state);
+  const userId = parseInt(state);      // value of userId from our db. gmail takes and release it
 
   if (!code || !userId) {
-    return res.redirect(`${process.env.FRONTEND_URL}/dashboard?gmail=error`);
+    return res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   }
 
   try {
     const oauth2Client = createOAuthClient();
-    const { tokens } = await oauth2Client.getToken(code); // verify with code & 
+    const { tokens } = await oauth2Client.getToken(code); //? getToken func give the code to Google and take tokens. It provides safety
     // get  mail_token(refresh_token), mail_access_token (access_token), mail_token_expiry (expiry_date)
     
     //? mail_token (refresh_token): long time token. if token is expired, we can use refresh_token to get new access_token.
@@ -38,8 +38,6 @@ router.get('/callback', async (req, res) => {
 
     //? mail_access_token (access_token): short time token. we use this token to access Gmail API.
     //? mail_token_expiry (expiry_date): access_token's expiry date just in milliseconds unix format.   
-    
-
 
 
     if (!tokens.refresh_token) {                          // if no refresh token or lifetime is over, user needs to reconnect
@@ -80,7 +78,7 @@ router.get('/callback', async (req, res) => {
 });
 
 
-// GET /api/gmail/emails -> pull emails about loggined user
+// GET /api/gmail/get-emails -> pull emails about loggined user
 router.get('/get-emails', authMiddleware, async (req, res) => {
   try {
     const { rows } = await pool.query(
@@ -98,18 +96,18 @@ router.get('/get-emails', authMiddleware, async (req, res) => {
 // PATCH /api/gmail/emails/:messageId/complaint — toggle complaint status
 router.patch('/emails/:messageId/complaint', authMiddleware, async (req, res) => {
   try {
-    const { messageId } = req.params; // ← en üste taşı
+    const { messageId } = req.params;  // get message id from params
 
-    const { rows } = await pool.query(
+    const { rows } = await pool.query(  // get complaint status from db 
       'SELECT complaint FROM processed_emails WHERE message_id=$1 AND user_id=$2',
       [messageId, req.user.id]
-    );
+    );  
 
-    if (!rows.length) {
+    if (!rows.length) {                 // if mail not found, return error
       return res.status(404).json({ error: 'Mail bulunamadı.' });
     }
 
-    const newComplaint = !rows[0].complaint;
+    const newComplaint = !rows[0].complaint;  // toggle complaint status
 
     await pool.query(
       'UPDATE processed_emails SET complaint=$1 WHERE message_id=$2 AND user_id=$3',

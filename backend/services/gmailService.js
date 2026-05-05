@@ -26,7 +26,7 @@ async function getAuthenticatedClient(user) {
 }
 
 async function fetchNewEmails(user, seenMessageIds = new Set()) {  // using Set for save seen emails ids for quick lookup
-  const auth = await getAuthenticatedClient(user);        // get authenticated google client
+  const auth = await getAuthenticatedClient(user);        // get authenticated google client to access inbox
   const gmail = google.gmail({ version: 'v1', auth });    // Launch the Gmail client, which will communicate with gmail services.
 
   const listRes = await gmail.users.messages.list({       // list last 5 emails with mail's id from inbox
@@ -39,7 +39,7 @@ async function fetchNewEmails(user, seenMessageIds = new Set()) {  // using Set 
   const newEmails = [];
 
   for (const msg of messages) {
-    if (seenMessageIds.has(msg.id)) continue;           // skip if already seen emails
+    if (seenMessageIds.has(msg.id)) continue;           // .has() return boolean. skip if already seen emails
 
     const detail = await gmail.users.messages.get({     // pull full email details with id
       userId: 'me',
@@ -93,6 +93,7 @@ async function sendEmail(user, { to, subject, body }) {
     body
   ].join('\n'); // for new line
 
+  //? gmail api requires base64url format, so we convert it to base64url
   const raw = Buffer.from(message)  // text to binary
     .toString('base64')             // binary to base64
     .replace(/\+/g, '-')            // base64 to base64url
