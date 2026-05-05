@@ -55,7 +55,7 @@ async function classifyAndForward(user, email) {
     // Log classification result for debugging
     console.log(`[Classifier] User ${user.id} - "${email.subject}"`);
     console.log(`  → Departman: ${department}`);
-    console.log(`  → Duygu: ${result.duygu}`);
+    console.log(`  → Duygu: ${result.emotion}`);
     console.log(`  → Skor: ${result.score}`);
     const targetEmail = DEPARTMENT_MAIL_MAP[department]; //mail address search in map
     if (!targetEmail) {     // not defined department

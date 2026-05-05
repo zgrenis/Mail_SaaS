@@ -15,7 +15,7 @@ const corsOptions = {
 app.use(cors(corsOptions));             // Enable requests for all routes
 app.use(bodyParser.json());     // Parse JSON bodies for all routes
 
-app.use(bodyParser.urlencoded({ extended: true })); //!test
+app.use(bodyParser.urlencoded({ extended: true })); 
 
 const userRoutes = require('./routes/user.routes');     //import user routes
 app.use('/api/users', userRoutes);                      // Use user routes with /api/users prefix

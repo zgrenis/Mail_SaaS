@@ -8,7 +8,7 @@ import {
 const PAGE_SIZE = 5;
 
 function ConfirmDialog({ email, onConfirm, onCancel }) {
-  const isReporting = !email.complaint; // şu an false → true yapacağız
+  const isReporting = !email.complaint;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
@@ -48,9 +48,7 @@ function ConfirmDialog({ email, onConfirm, onCancel }) {
           <button
             onClick={onConfirm}
             className={`px-3 py-1.5 text-xs font-medium rounded-lg text-white transition-colors ${
-              isReporting
-                ? 'bg-red-500 hover:bg-red-600'
-                : 'bg-green-500 hover:bg-green-600'
+              isReporting ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
             }`}
           >
             {isReporting ? 'Bildir' : 'Geri Al'}
@@ -63,12 +61,12 @@ function ConfirmDialog({ email, onConfirm, onCancel }) {
 
 export default function EmailsTable() {
   const dispatch = useDispatch();
-  const emails = useSelector(selectEmails);
+  const emails  = useSelector(selectEmails);
   const loading = useSelector(selectEmailsLoading);
   const error   = useSelector(selectEmailsError);
 
   const [currentPage, setCurrentPage]   = useState(1);
-  const [confirmEmail, setConfirmEmail] = useState(null); // dialog için seçili mail
+  const [confirmEmail, setConfirmEmail] = useState(null);
 
   useEffect(() => { dispatch(fetchEmails()); }, [dispatch]);
 
@@ -81,8 +79,10 @@ export default function EmailsTable() {
   if (error)   return <p className="text-center text-red-500 py-8">{error}</p>;
   if (!emails.length) return <p className="text-center text-gray-400 py-8">Henüz mail bulunmuyor.</p>;
 
-  const totalPages = Math.ceil(emails.length / PAGE_SIZE);
-  const paginated  = emails.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  // ↓ En yeni processed_at üstte
+  const sorted     = [...emails].sort((a, b) => new Date(b.processed_at) - new Date(a.processed_at));
+  const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
+  const paginated  = sorted.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   return (
     <>
@@ -97,7 +97,6 @@ export default function EmailsTable() {
       <div className="w-full space-y-3">
         <div className="w-full rounded-xl border border-gray-200 shadow-sm">
           <table className="w-full text-sm text-left table-fixed">
-            {/* thead aynı kalır */}
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
               <tr>
                 <th className="px-4 py-3 w-[8%]">Message ID</th>
@@ -122,7 +121,7 @@ export default function EmailsTable() {
                   <td className="px-4 py-3 text-gray-600 break-words">{email.processed}</td>
                   <td className="px-4 py-3">
                     <button
-                      onClick={() => setConfirmEmail(email)}   // ← artık direkt dispatch değil
+                      onClick={() => setConfirmEmail(email)}
                       className={`px-3 py-1 text-xs font-medium rounded-lg transition-colors w-full cursor-pointer ${
                         email.complaint
                           ? 'bg-green-100 text-green-600 hover:bg-green-200'
@@ -138,9 +137,49 @@ export default function EmailsTable() {
           </table>
         </div>
 
-        {/* Pagination — aynı kalır */}
+        {/* Pagination */}
         <div className="flex items-center justify-between px-1">
-          {/* ... mevcut kodun aynısı ... */}
+          <p className="text-xs text-gray-400">
+            Toplam <span className="font-medium text-gray-600">{sorted.length}</span> kayıt —{' '}
+            Sayfa <span className="font-medium text-gray-600">{currentPage}</span> / {totalPages}
+          </p>
+
+          <div className="flex items-center gap-1">
+            {/* Önceki */}
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-2.5 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-600
+                         hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              ‹
+            </button>
+
+            {/* Sayfa numaraları */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-2.5 py-1.5 text-xs rounded-lg border transition-colors ${
+                  page === currentPage
+                    ? 'bg-blue-500 border-blue-500 text-white'
+                    : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            {/* Sonraki */}
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-2.5 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-600
+                         hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              ›
+            </button>
+          </div>
         </div>
       </div>
     </>
