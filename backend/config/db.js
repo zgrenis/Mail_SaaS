@@ -7,14 +7,10 @@ require('dotenv').config();
 // This prevents overload and keeps the system stable.
 
 //? dev env
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('render.com') || process.env.DATABASE_URL?.includes('amazonaws.com')
-    ? { rejectUnauthorized: false }
-    : false
+  ssl: false
 });
-
 
 //? prod env
 /*const pool = new Pool({

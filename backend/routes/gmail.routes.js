@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { google } = require('googleapis');
-const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
 const { createOAuthClient, SCOPES } = require('../config/google');
 const { encrypt } = require('../services/cryptoService');
-const { sendEmail } = require('../services/gmailService');
 const authMiddleware = require('../middleware/auth');
 
 // GOOGLE PAGE GET /api/gmail/connect — request with bearer token, returns Google OAuth URL

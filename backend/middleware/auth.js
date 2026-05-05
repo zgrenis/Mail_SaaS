@@ -6,8 +6,8 @@ function authMiddleware(req, res, next) {
 
   const token = authHeader.split(' ')[1]; // solve "Bearer <token_burada>" format
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET); // verify and solve token with secret key and assign decoded user info to req.user for use in routes
-    next();
+    req.user = jwt.verify(token, process.env.JWT_SECRET); // verify and solve token with secret key and assign, decoded user info to req.user for use in routes
+    next();     // pass control to the next route handler
   } catch {
     res.status(401).json({ error: 'Geçersiz token' });
   }
