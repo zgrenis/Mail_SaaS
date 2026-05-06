@@ -13,13 +13,12 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS
   },
   tls: {
-    // Bazı ağlarda sertifika doğrulamasını esnetmek gerekebilir
     rejectUnauthorized: false 
   }
 });
 
 // POST /api/contact
-router.post("/", async (req, res) => {
+router.post("", async (req, res) => {
   try {
     const { name, email, message } = req.body;
 
@@ -27,10 +26,6 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Eksik alan var" });
     }
 
-    // 1. DB'ye kaydet
-    //await Contact.create({ name, email, message });
-
-    // 2. Mail gönder
     await transporter.sendMail({
       from: email,
       to: process.env.EMAIL_USER,

@@ -25,51 +25,47 @@ async function getAuthenticatedClient(user) {
   return oauth2Client;
 }
 
-async function fetchNewEmails(user, seenMessageIds = new Set()) {  // using Set for save seen emails ids for quick lookup
-  const auth = await getAuthenticatedClient(user);        // get authenticated google client to access inbox
-  const gmail = google.gmail({ version: 'v1', auth });    // Launch the Gmail client, which will communicate with gmail services.
+async function fetchLastFiveEmails(user) {
+  //! It can be optimized for last checked time in user table
+  const auth = await getAuthenticatedClient(user);
+  const gmail = google.gmail({ version: 'v1', auth });
 
-  const listRes = await gmail.users.messages.list({       // list last 5 emails with mail's id from inbox
+  const listRes = await gmail.users.messages.list({
     userId: 'me',
     maxResults: 5,
     labelIds: ['INBOX']
   });
 
-  const messages = listRes.data.messages || [];         // seen emails id
+  const messages = listRes.data.messages || [];
   const newEmails = [];
 
   for (const msg of messages) {
-    if (seenMessageIds.has(msg.id)) continue;           // .has() return boolean. skip if already seen emails
-
-    const detail = await gmail.users.messages.get({     // pull full email details with id
+    const detail = await gmail.users.messages.get({
       userId: 'me',
       id: msg.id,
       format: 'full'
     });
 
-    const headers = detail.data.payload.headers;      // extract headers from email's header 
-    const getHeader = (name) => headers.find(h => h.name === name)?.value || ''; // helper function to get specific header value
+    const headers = detail.data.payload.headers;
+    const getHeader = (name) => headers.find(h => h.name === name)?.value || '';
 
-    // Body parse
+    const decodeBase64 = (data) =>
+      Buffer.from(data.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8');
+
     let body = '';
     const parts = detail.data.payload.parts;
     if (parts) {
-      const textPart = parts.find(p => p.mimeType === 'text/plain') // default text
-                    || parts.find(p => p.mimeType === 'text/html'); // html format 
-      //? textPart is a json object that contains partId mimtype etc and body {size:.., data:..., etc}
-      if (textPart?.body?.data) {
-      //? use replace to convert base64url to base64, then decode it to utf-8 string
-        body = Buffer.from(textPart.body.data.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8');
-      }
-    } else if (detail.data.payload.body?.data) { // if no parts, try to get body from payload
-      body = Buffer.from(detail.data.payload.body.data.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8');
+      const textPart = parts.find(p => p.mimeType === 'text/plain')
+                    || parts.find(p => p.mimeType === 'text/html');
+      if (textPart?.body?.data) body = decodeBase64(textPart.body.data);
+    } else if (detail.data.payload.body?.data) {
+      body = decodeBase64(detail.data.payload.body.data);
     }
 
-    // Add emails to new emails list
     newEmails.push({
       id: msg.id,
       from: getHeader('From'),
-      to: getHeader('To'), 
+      to: getHeader('To'),
       subject: getHeader('Subject'),
       date: getHeader('Date'),
       snippet: detail.data.snippet,
@@ -109,4 +105,4 @@ async function sendEmail(user, { to, subject, body }) {
   return res.data;
 }
 
-module.exports = { fetchNewEmails, sendEmail, getAuthenticatedClient };
+module.exports = { fetchLastFiveEmails, sendEmail, getAuthenticatedClient };
