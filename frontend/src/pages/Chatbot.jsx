@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Send, Bot, X, MessageCircle, Loader2, Sparkles, Trash2 } from "lucide-react";
 
-/* ─── config ────────────────────────────────────────────────── */
+/* ──────────── connection config ────────────────── */
 const API_URL     = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
-const LS_KEY      = "chatbot_history";
+const LS_KEY      = "chatbot_history"; // local storage key for chatbot history
 const MAX_HISTORY = 20;
 
-/* ─── helpers ───────────────────────────────────────────────── */
+/* ──────────── helpers ───────────────────────── */
 const formatTime = (date) =>
   new Date(date).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
 
@@ -20,11 +20,11 @@ function loadHistory(brandName) {
 function saveHistory(brandName, messages) {
   localStorage.setItem(
     `${LS_KEY}_${brandName}`,
-    JSON.stringify(messages.slice(-MAX_HISTORY))
+    JSON.stringify(messages.slice(-MAX_HISTORY)) // save from end to start (last messages)
   );
 }
 
-/* ─── TypingIndicator ───────────────────────────────────────── */
+/* ──────────── bot writing bubble ────────────────── */
 function TypingIndicator() {
   return (
     <div className="flex items-end gap-2">
@@ -41,24 +41,23 @@ function TypingIndicator() {
   );
 }
 
-/* ─── Message ────────────────────────────────────────────────── */
+/* ─── message render function ────────────────────────────────────────────────── */
 function Message({ msg, isLast }) {
   const isBot = msg.role === "assistant";
   return (
     <div className={`flex items-end gap-2 ${isBot ? "" : "flex-row-reverse"} ${isLast ? "animate-[fadeSlideUp_0.18s_ease]" : ""}`}>
+      {/* edit bubble location and render if bot writting */}
       {isBot && (
         <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-indigo-200 mb-0.5">
           <Bot size={13} className="text-white" />
         </div>
       )}
+
       <div className={`max-w-[78%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm
         ${isBot ? "bg-white border border-slate-100 text-slate-700 rounded-bl-sm"
                 : "bg-indigo-600 text-white rounded-br-sm shadow-indigo-200"}`}>
         <p className="whitespace-pre-wrap">
           {msg.content}
-          {msg.streaming && (
-            <span className="inline-block w-0.5 h-3.5 bg-indigo-400 ml-0.5 align-middle animate-[blink_0.8s_step-end_infinite]" />
-          )}
         </p>
         {!msg.streaming && (
           <time className={`block text-[10px] mt-1 ${isBot ? "text-slate-400" : "text-indigo-200"}`}>
@@ -71,34 +70,36 @@ function Message({ msg, isLast }) {
 }
 
 /* ─── ChatBot ────────────────────────────────────────────────── */
-export default function ChatBot({ brandName = "Maavi" }) {
+export default function ChatBot({ brandName = "Orbis Giyim" }) {
   const WELCOME = {
     role: "assistant",
     content: `Merhaba! Ben ${brandName} müşteri hizmetleri asistanıyım. Size nasıl yardımcı olabilirim? 😊`,
     time: new Date().toISOString(),
   };
 
-  const [open,     setOpen]     = useState(false);
-  const [messages, setMessages] = useState(() => {
+  const [open,     setOpen]     = useState(false);   //dialog page open/close state
+  const [messages, setMessages] = useState(() => {   // load from local storage
     const saved = loadHistory(brandName);
     return saved.length > 0 ? saved : [WELCOME];
   });
-  const [input,   setInput]   = useState("");
-  const [loading, setLoading] = useState(false);
+  const [input,   setInput]   = useState("");         //input field state
+  const [loading, setLoading] = useState(false);      //loading state
 
+  //to improve User Experience
   const bottomRef   = useRef(null);
   const textareaRef = useRef(null);
   const readerRef   = useRef(null);
 
-  useEffect(() => { saveHistory(brandName, messages); }, [messages, brandName]);
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, loading]);
-  useEffect(() => { if (open) setTimeout(() => textareaRef.current?.focus(), 160); }, [open]);
+  useEffect(() => { saveHistory(brandName, messages); }, [messages, brandName]);   //save history state every change on messages or brandName
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, loading]); //auto scroll to bottom
+  useEffect(() => { if (open) setTimeout(() => textareaRef.current?.focus(), 160); }, [open]); //auto focus on open
 
+  //clean datas before sending to backend 
   const getApiHistory = useCallback(() =>
     messages.filter((m) => !m.streaming).map(({ role, content }) => ({ role, content })),
   [messages]);
 
-  /* son bot mesajını güncelle */
+  /* update last streaming bot message */
   const updateLastBot = useCallback((updater) => {
     setMessages((prev) => {
       const copy = [...prev];
@@ -107,6 +108,7 @@ export default function ChatBot({ brandName = "Maavi" }) {
     });
   }, []);
 
+  //chat screen
   function handleInputChange(e) {
     setInput(e.target.value);
     const ta = textareaRef.current;
@@ -118,114 +120,97 @@ export default function ChatBot({ brandName = "Maavi" }) {
     setMessages([WELCOME]);
   }
 
-  async function sendMessage() {
-    const text = input.trim();
-    if (!text || loading) return;
+ async function sendMessage() {
+  const text = input.trim();
+  if (!text || loading) return;
 
-    setMessages((prev) => [...prev, { role: "user", content: text, time: new Date().toISOString() }]);
-    setInput("");
-    if (textareaRef.current) textareaRef.current.style.height = "auto";
-    setLoading(true);
+  setMessages((prev) => [
+    ...prev,
+    { role: "user", content: text, time: new Date().toISOString() },  // ISO: year month day
+    { role: "assistant", content: "", time: new Date().toISOString(), streaming: true },
+  ]);
 
-    /* boş placeholder */
-    setMessages((prev) => [...prev, {
-      role: "assistant", content: "", time: new Date().toISOString(), streaming: true,
-    }]);
+  setInput("");
+  if (textareaRef.current) textareaRef.current.style.height = "auto"; //auto resize textarea
+  setLoading(true);
 
-    try {
-      const res = await fetch(`${API_URL}/api/chat`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({
-          brand_name: brandName.toLowerCase(),
-          message:    text,
-          history:    getApiHistory(),
-        }),
-      });
+  try {
+    const res = await fetch(`${API_URL}/api/chat`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({
+        brand_name: brandName.toLowerCase(),
+        message:    text,
+        history:    getApiHistory(),
+      }),
+    });
 
-      if (!res.ok) {
-        const errText = await res.text().catch(() => `HTTP ${res.status}`);
-        throw new Error(errText);
-      }
+    if (!res.ok) {
+      const errText = await res.text().catch(() => `HTTP ${res.status}`);
+      throw new Error(errText);
+    }
+//!
+    const reader  = res.body.getReader(); // to read stream api response
+    readerRef.current = reader;
+    const decoder = new TextDecoder();   //! decoder is necesseary when streaming data from api on http
+    let   buffer  = "";
+    let   gotAnyChunk = false;
 
-      /* ── SSE okuyucu ── */
-      const reader  = res.body.getReader();
-      readerRef.current = reader;
-      const decoder = new TextDecoder();
-      let   buffer  = "";
-      let   gotAnyChunk = false;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      //split lines 
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop();               //for incomplete lines
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      for (const line of lines) {
+        if (line.startsWith("event: error")) continue; //error check
 
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop();
+        if (line.startsWith("data:")) {                 // to get data
+          const raw = line.slice(5).trim();
+          if (!raw) continue;
 
-        for (const line of lines) {
-          /* ── SSE hata event'i ── */
-          if (line.startsWith("event: error")) continue;
+          if (raw === "[DONE]") {                        // to end the stream
+            if (!gotAnyChunk) {
+              updateLastBot((m) => ({ ...m, content: "Yanıt alınamadı. Lütfen tekrar deneyin." }));
+            }
+            break;
+          }
 
-          if (line.startsWith("data:")) {
-            const raw = line.slice(5).trim();
-            if (!raw) continue;
+          try {
+            const parsed = JSON.parse(raw);
 
-            if (raw === "[DONE]") {
-              /* stream bitti ama hiç chunk gelmediyse hata göster */
-              if (!gotAnyChunk) {
-                updateLastBot((m) => ({
-                  ...m,
-                  content: "Yanıt alınamadı. Lütfen tekrar deneyin.",
-                }));
-              }
+            if (parsed.message && !parsed.chunk) {      //spesific error message
+              updateLastBot((m) => ({ ...m, content: `Hata: ${parsed.message}` }));
+              gotAnyChunk = true;
               break;
             }
 
-            try {
-              const parsed = JSON.parse(raw);
-
-              /* SSE hata mesajı */
-              if (parsed.message && !parsed.chunk) {
-                console.error("[ChatBot] SSE error:", parsed.message);
-                updateLastBot((m) => ({
-                  ...m,
-                  content: `Hata: ${parsed.message}`,
-                }));
-                gotAnyChunk = true; // hata mesajı gösterildi, boş kalmasın
-                break;
-              }
-
-              if (parsed.chunk) {
-                gotAnyChunk = true;
-                updateLastBot((m) => ({ ...m, content: m.content + parsed.chunk }));
-              }
-            } catch {
-              /* JSON değil, düz metin chunk olabilir */
-              if (raw.length > 0) {
-                gotAnyChunk = true;
-                updateLastBot((m) => ({ ...m, content: m.content + raw }));
-              }
+            if (parsed.chunk) {                          // chunk is real data  
+              gotAnyChunk = true;
+              updateLastBot((m) => ({ ...m, content: m.content + parsed.chunk }));
+            }
+          } catch {                                      // for fallback (string format)
+            if (raw.length > 0) {
+              gotAnyChunk = true;
+              updateLastBot((m) => ({ ...m, content: m.content + raw }));
             }
           }
         }
       }
-
-    } catch (err) {
-      if (err.name !== "AbortError") {
-        console.error("[ChatBot] fetch hatası:", err.message);
-        updateLastBot((m) => ({
-          ...m,
-          content: `Bağlantı hatası: ${err.message}`,
-        }));
-      }
-    } finally {
-      updateLastBot((m) => ({ ...m, streaming: false }));
-      readerRef.current = null;
-      setLoading(false);
     }
-  }
 
+  } catch (err) { // catch connection errors
+    if (err.name !== "AbortError") {
+      updateLastBot((m) => ({ ...m, content: `Bağlantı hatası: ${err.message}` }));
+    }
+  } finally {    //
+    updateLastBot((m) => ({ ...m, streaming: false }));
+    readerRef.current = null;
+    setLoading(false);
+  }
+}
   function handleKey(e) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   }
@@ -280,10 +265,10 @@ export default function ChatBot({ brandName = "Maavi" }) {
                 {new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}
               </span>
             </div>
-            {messages.map((m, i) => (
-              <Message key={i} msg={m} isLast={i === messages.length - 1} />
-            ))}
-            {loading && messages[messages.length - 1]?.content === "" && <TypingIndicator />}
+            {messages.map((m, i) => ( 
+               m.content ? <Message key={i} msg={m} isLast={i === messages.length - 1} />
+            : null))}
+            {messages[messages.length - 1]?.streaming && messages[messages.length - 1]?.content === "" && <TypingIndicator />}
             <div ref={bottomRef} />
           </div>
 
@@ -302,7 +287,7 @@ export default function ChatBot({ brandName = "Maavi" }) {
           </div>
 
           <p className="text-center text-[10px] text-slate-400 pb-2 bg-white">
-            Powered by <span className="text-indigo-500 font-medium">AI</span>
+            Powered by <span className="text-indigo-500 font-medium">Orbis</span>
           </p>
         </div>
       )}
