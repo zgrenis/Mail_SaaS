@@ -26,10 +26,10 @@ router.post("/", async (req, res) => {
   res.setHeader("X-Accel-Buffering", "no"); //disable buffering for NGINX
   res.flushHeaders(); 
 
-  const sendChunk = (chunk) => //send chunk to client in SSE format
+  const sendChunk = (chunk) => //send chunk to client in SSE protocol
     res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
 
-  const sendError = (msg) => //send error to client in SSE format
+  const sendError = (msg) => //send error to client in SSE protocol
     res.write(`event: error\ndata: ${JSON.stringify({ message: msg })}\n\n`);
 
   //? node js send close event when client close the connection and we cancel the previous connection 
@@ -56,16 +56,11 @@ router.post("/", async (req, res) => {
 
     //? send data from python service to client in real time 
     upstream.data.on("data", (chunk) => {
-      const raw = chunk.toString("utf-8"); // chunk is a binary format data so we convert it to utf-8 string
       try {
-        const parsed = JSON.parse(raw);   // parse the json data
-        if (parsed.answer) {              // if parsed data has answer field
-          sendChunk(parsed.answer);       // send it to client
-        } else {
-          sendChunk(raw);                 // else send raw data
-        }
-      } catch (e) {
-        sendChunk(raw);                 // if parsing fails send raw data
+        res.write(chunk); //python sends
+      } catch (error) {
+        console.error("[chat.route] res.write error:", error);
+        
       }
     });
 

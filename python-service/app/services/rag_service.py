@@ -18,7 +18,8 @@ def chat(brand_name: str, message: str, faq_results: list[dict], history: list[d
 
     messages = history[-10:] + [{"role": "user", "content": message}]   # last 10 messages should be 
 
-    res = client.chat.completions.create(                               # request to groq
+    #? open stream connection with groq to pull response chunk by chunk
+    stream = client.chat.completions.create(                               # request to groq
         model="meta-llama/llama-4-scout-17b-16e-instruct",
         messages=[
             {"role": "system", "content": SYSTEM.format(brand_name=brand_name, context=context)},
@@ -26,5 +27,12 @@ def chat(brand_name: str, message: str, faq_results: list[dict], history: list[d
         ],
         temperature=0.5,
         max_tokens=512,
+        stream=True,           # stream enabled for real time response 
     )
-    return res.choices[0].message.content
+
+    #? send every response that come from groq to backend via yield 
+    #? yield is like return but it returns values without terminating the function
+    for chunk in stream:
+        delta = chunk.choices[0].delta.content
+        if delta:
+            yield delta 
