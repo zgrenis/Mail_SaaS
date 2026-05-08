@@ -225,14 +225,15 @@ export default function ChatBot({ brandName = "VELOUR Asistant" }) {
 
       {/* FAB */}
       <button onClick={() => setOpen((v) => !v)} aria-label="Müşteri hizmetleri"
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl shadow-indigo-300 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95">
+        className="fixed bottom-6 right-6 z-999
+         w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl shadow-indigo-300 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95">
         {open ? <X size={22} /> : <MessageCircle size={22} />}
         {!open && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white" />}
       </button>
 
       {/* Chat window */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-40 w-[370px] max-w-[calc(100vw-24px)] bg-slate-50 rounded-2xl shadow-2xl shadow-slate-300/60 border border-slate-200 flex flex-col overflow-hidden"
+        <div className="fixed bottom-24 right-6 z-9998 w-[370px] max-w-[calc(100vw-24px)] bg-slate-50 rounded-2xl shadow-2xl shadow-slate-300/60 border border-slate-200 flex flex-col overflow-hidden"
           style={{ animation: "popIn .22s ease" }}>
 
           {/* Header */}
