@@ -2,8 +2,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'; // Redux'tan veri çekmek için
 import PrivateRoute from './components/PrivateRoute';
-
-
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -14,7 +12,7 @@ import About from './pages/About';
 import PrivacyPolicy from './pages/Privacy';
 import Terms from './pages/Term';
 import Contact from './pages/Contact';
-import Chatbot from './pages/Chatbot';
+import Simule from './pages/Simule';
 
 // Giriş kontrolü yapan koruyucu bileşen
 const ProtectedRoute = ({ children }) => {
@@ -46,25 +44,30 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/chatbot" element={<Chatbot />} />
-
-          
+          <Route path="/contact" element={<Contact />} />          
           <Route 
             path="/dashboard" 
             element={
               <PrivateRoute >
                 <Dashboard />
-                
               </PrivateRoute>
             } 
-          /> 
+            />
+            <Route
+              path="/dashboard/simule"
+              element={
+                <PrivateRoute >
+                  <Simule />
+                </PrivateRoute>
+              }
+            />
+           
     
           <Route path="*" element={<Navigate to="/login" replace />} />
           
         </Routes>
       </main>
-      <Chatbot />
+      
       <Footer />
     </div>
   );

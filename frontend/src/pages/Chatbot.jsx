@@ -70,7 +70,7 @@ function Message({ msg, isLast }) {
 }
 
 /* ─── ChatBot ────────────────────────────────────────────────── */
-export default function ChatBot({ brandName = "Orbis Giyim" }) {
+export default function ChatBot({ brandName = "VELOUR Asistant" }) {
   const WELCOME = {
     role: "assistant",
     content: `Merhaba! Ben ${brandName} müşteri hizmetleri asistanıyım. Size nasıl yardımcı olabilirim? 😊`,

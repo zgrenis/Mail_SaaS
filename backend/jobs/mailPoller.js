@@ -39,7 +39,7 @@ async function markProcessed(userId, messageId, meta = {}) {
 
 //? update mail by returned python datas
 async function updateClassification(userId, messageId, result) {
-  const processed = `Fixed Mail:\n${result.fixed_text || '-'}\n\nDepartment: ${result.department || '-'}\nEmotion: ${result.emotion || '-'}`;
+  const processed = `${result.fixed_text || '-'}\n\nDepartment: ${result.department || '-'}\nEmotion: ${result.emotion || '-'}`;
   await pool.query(
     'UPDATE processed_emails SET department=$1, processed=$2 WHERE user_id=$3 AND message_id=$4',
     [result.department, processed, userId, messageId]
