@@ -12,7 +12,7 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 
-
+//test for new acc
 app.use(cors(corsOptions));             // Enable requests for all routes
 app.use(bodyParser.json());     // Parse JSON bodies for all routes
 
